@@ -1,8 +1,8 @@
-# Getting Started with Create React App
+# Language Learning Game Frontend
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Getting Started with Frontend description
 
 In the project directory, you can run:
 
