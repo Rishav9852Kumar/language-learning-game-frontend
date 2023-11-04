@@ -14,7 +14,7 @@ import SignIn from "./account/signIn.js";
 import SignUp from "./account/signUp.js";
 import PageNotFound from "./utils/NotFound.js";
 import Footer from "./footer/footer.js";
-import Header from "./header/Header.js";
+import Header from "./header/header.js";
 import AdminPage from "./admin/adminPage.js";
 import User from "./account/user.js";
 import LeaderBoard from "./account/leaderBoard.js";

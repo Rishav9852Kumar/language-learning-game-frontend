@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 
-const Header = () => {
+const header = () => {
   return (
     <header className="header">
       <h1 className="header-title">Language Learning Game</h1>
@@ -21,4 +21,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default header;
