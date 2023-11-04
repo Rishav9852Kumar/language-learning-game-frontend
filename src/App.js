@@ -32,7 +32,7 @@ const firebaseConfig = {
   appId: "1:1061857104452:web:0b2af7f961bf31e59c2211",
   measurementId: "G-ZJBH8E0SJ7",
 };
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 function App() {
   const [user, setUser] = useState(null);
