@@ -27,33 +27,31 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
 
   const handleSignUp = () => {
-    if(email=="")
-    {
+    if (email === "") {
       toast("Enter Valid email", {
         type: "warning",
       });
-    }else if(password == "")
-    {
+    } else if (password === "") {
       toast("Enter Valid password", {
         type: "warning",
       });
-    }else{
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        context.setUser({ email: user.email, uid: user.uid });
-        toast("Account Created", {
-          type: "success",
+    } else {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          context.setUser({ email: user.email, uid: user.uid });
+          toast("Account Created", {
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          toast(error.message, {
+            type: "error",
+          });
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast(error.message, {
-          type: "error",
-        });
-      });
     }
   };
 
@@ -61,9 +59,9 @@ const SignUp = () => {
     e.preventDefault();
     handleSignUp();
   };
- if (context.user?.uid) {
-   return <Navigate to="/" />;
- }
+  if (context.user?.uid) {
+    return <Navigate to="/" />;
+  }
   return (
     <div
       style={{
