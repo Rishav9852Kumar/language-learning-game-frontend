@@ -1,10 +1,6 @@
-import React, { useContext } from "react";
-import { UserContext } from "../context/userContext";
+import React from "react";
 
 const HomePage = () => {
-  const context = useContext(UserContext);
-  const user = context.user;
-
   return (
     <div>
       <h1>Welcome to the HomePage, { "Guest"}!</h1>
