@@ -18,7 +18,7 @@ import PageNotFound from "./utils/NotFound.js";
 import Footer from "./footer/footer.js";
 import Header from "./header/header.js";
 import AdminPage from "./admin/adminPage.js";
-import User from "./account/user.js";
+import User from "./account/User.js";
 import LeaderBoard from "./account/leaderBoard.js";
 import AboutPage from "./utils/AboutPage.js";
 
@@ -36,13 +36,11 @@ initializeApp(firebaseConfig);
 
 function App() {
   const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  
+//  const [isAdmin, setIsAdmin] = useState(false);
   return (
     <Router>
       <ToastContainer />
-      <UserContext.Provider value={{ user, setUser, userId, setUserId, isAdmin, setIsAdmin }}>
+      <UserContext.Provider value={{ user, setUser}}>
         <Header />
         <Routes>
           <Route exact path="/" element={<HomePage />} />

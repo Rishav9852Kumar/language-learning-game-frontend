@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import axios from "axios"; // Import axios for making API requests
 import {
   Container,
   Form,
@@ -25,6 +26,7 @@ const SignUp = () => {
   const context = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // To track loading state
 
   const handleSignUp = () => {
     if (email === "") {
@@ -41,10 +43,11 @@ const SignUp = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+
           context.setUser({ email: user.email, uid: user.uid });
-          toast("Account Created", {
-            type: "success",
-          });
+
+          // Fetch user details from the API and update context
+          fetchUserDetails(user.email);
         })
         .catch((error) => {
           console.log(error);
@@ -54,7 +57,65 @@ const SignUp = () => {
         });
     }
   };
+const fetchUserDetails = (email) => {
+  setIsLoading(true); // Show loading indicator
 
+  // PUT request to create a user
+  axios
+    .put(
+      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
+      {
+        email: email,
+      }
+    )
+    .then((response) => {
+      const userDetails = response.data[0];
+      context.setUser({
+        name: userDetails.name,
+        gameUid: userDetails.UserId,
+      });
+      toast("Account Created", {
+        type: "success",
+      });
+
+      // Now, make a GET request to fetch user details
+      axios
+        .get(
+          "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
+          {
+            params: { email: email },
+          }
+        )
+        .then((response) => {
+          const userDetails = response.data[0];
+          context.setUser({
+            name: userDetails.name,
+            gameUid: userDetails.UserId,
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching user details: ", error);
+        })
+        .finally(() => {
+          setIsLoading(false); // Hide loading indicator
+        });
+    })
+    .catch((error) => {
+      console.error("Error creating a user: ", error);
+      setIsLoading(false); // Hide loading indicator
+    });
+};
+ useEffect(() => {
+   // Show or hide progress toast based on isLoading state
+   if (isLoading) {
+     toast("Signing up...", {
+       type: "info",
+       autoClose: false, // Don't auto-close this toast
+     });
+   } else {
+     toast.dismiss(); // Dismiss any active toasts
+   }
+ }, [isLoading]);
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSignUp();
