@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import HomePage from "./home/homePage.js";
 import SignIn from "./account/signIn.js";
 import SignUp from "./account/signUp.js";
-import PageNotFound from "./utils/PageNotFound.js";
+import PageNotFound from "./utils/NotFound.js";
 import Footer from "./footer/footer.js";
 import Header from "./header/Header.js";
 import AdminPage from "./admin/adminPage.js";

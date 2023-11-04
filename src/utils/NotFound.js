@@ -1,7 +1,7 @@
 import React from "react";
 import "./PageNotFound.css"; // Import your CSS file
 
-const PageNotFound = () => {
+const NotFound = () => {
   return (
     <div className="not-found-container">
       <div className="not-found-content">
@@ -15,4 +15,4 @@ const PageNotFound = () => {
   );
 };
 
-export default PageNotFound;
+export default NotFound;
