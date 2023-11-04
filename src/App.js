@@ -1,6 +1,6 @@
 import React ,{useState} from 'react';
 import './App.css';
-import { userContext } from "./context/userContext";
+import { UserContext } from "./context/UserContext.js";
 
 // react-router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -28,7 +28,7 @@ function App() {
   return (
     <Router>
       <ToastContainer />
-      <userContext.Provider value={{ user, setUser, userId, setUserId, isAdmin, setIsAdmin }}>
+      <UserContext.Provider value={{ user, setUser, userId, setUserId, isAdmin, setIsAdmin }}>
         <Header />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
@@ -41,7 +41,7 @@ function App() {
           <Route exact path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
-      </userContext.Provider>
+      </UserContext.Provider>
     </Router>
   );
 }
