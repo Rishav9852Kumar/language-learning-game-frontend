@@ -17,7 +17,7 @@ import {
 
 import "firebase/auth";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/userContext";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
