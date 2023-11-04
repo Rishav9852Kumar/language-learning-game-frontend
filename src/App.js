@@ -12,12 +12,13 @@ import "react-toastify/dist/ReactToastify.css";
 import HomePage from "./home/homePage.js";
 import SignIn from "./account/signIn.js";
 import SignUp from "./account/signUp.js";
-import PageNotFound from "./utils/pageNotFound.js";
+import PageNotFound from "./utils/PageNotFound.js";
 import Footer from "./footer/footer.js";
-import Header from "./header/header.js";
+import Header from "./header/Header.js";
 import AdminPage from "./admin/adminPage.js";
 import User from "./account/user.js";
 import LeaderBoard from "./account/leaderBoard.js";
+import AboutPage from "./utils/AboutPage.js";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -36,6 +37,7 @@ function App() {
           <Route exact path="/user/admin" element={<AdminPage />} />
           <Route exact path="/user" element={<User />} />
           <Route exact path="/user/leaderboard" element={<LeaderBoard />} />
+          <Route exact path="/about" element={<AboutPage />} />
           <Route exact path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
