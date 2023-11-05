@@ -10,10 +10,10 @@ const User = () => {
  if (!context.user?.uid) {
    return <Navigate to="/signin" />;
  }
-
+  
   const name = playerContext.player.name || "guest";
   const email = playerContext.player.email;
-  const gameUid = playerContext.player.gameUid;
+  const gameUid = context.user.uid;
   // Now you can safely access the user's name   
   return (
     <div>

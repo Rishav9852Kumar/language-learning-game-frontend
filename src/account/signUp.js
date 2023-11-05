@@ -22,9 +22,11 @@ import "firebase/auth";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
+import { PlayerContext } from "../context/playerContext";
 
 const SignUp = () => {
   const context = useContext(UserContext);
+  const playerContext = useContext(PlayerContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false); // To track loading state
@@ -54,69 +56,77 @@ const SignUp = () => {
         });
     }
   };
-  const fetchUserDetails = (email) => {
+  const fetchUserDetails = async (email) => {
     setIsLoading(true);
-const requestData = { email: email };
-    axios
-      .put("/api/user", {
-        data: requestData,
-        headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
-        },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          const userDetails = response.data[0];
-          context.setUser({
-            name: userDetails.UserName,
-            gameUid: `name${userDetails.UserId}`,
+    try {
+      const response = await axios.put(
+        "api/user",
+        { email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("response = " + response);
+      console.log("response.data = " + response.data);
+
+      if (response.status === 200) {
+        
+        const secondResponse = await axios.get(
+          "api/user",
+          { email },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("secondResponse = " + secondResponse);
+        console.log("secondResponse.data = " + secondResponse.data);
+
+        if (secondResponse.status === 200) {
+          const userDetails = secondResponse.data[0];
+          const userName = userDetails.UserName;
+          const gameUid = userDetails.UserId;
+
+          playerContext.setPlayer({
+            email: email,
+            name: userName,
+            gameUid: gameUid,
           });
+
           toast("Account Created", {
             type: "success",
           });
-          axios
-            .get("/api/user", {
-              data: requestData,
-              headers: {
-                "Content-Type": "application/json", // Set the content type to JSON
-              },
-            })
-            .then((response) => {
-              const userDetails = response.data[0];
-              context.setUser({
-                name: userDetails.UserName,
-                gameUid: `name${userDetails.UserId}`,
-              });
-            })
-            .catch((error) => {
-              toast(error.message, {
-                type: "error",
-              });
-              console.error("Error fetching user details: ", error);
-            })
-            .finally(() => {
-              setIsLoading(false);
-            });
-        } else if (response.status === 404) {
-          toast("Unable to find account data", {
+        }else{
+          toast(response.data, {
             type: "error",
           });
+          console.log("context player = " + playerContext.player);
         }
-      })
-      .catch((error) => {
+        setIsLoading(false);
+      } else if (response.status === 404) {
+        toast("Unable to create player account"+ response, {
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.error("failed to create player account : "+error);
+      setIsLoading(false);
         toast(error.message, {
           type: "error",
         });
-        console.error("Error creating a user: ", error);
-        setIsLoading(false);
-      });
+    }
   };
   useEffect(() => {
     // Show or hide progress toast based on isLoading state
     if (isLoading) {
       toast("Signing up...", {
         type: "info",
-        autoClose: false, // Don't auto-close this toast
+        autoClose: true, // Don't auto-close this toast
       });
     } else {
       toast.dismiss(); // Dismiss any active toasts
