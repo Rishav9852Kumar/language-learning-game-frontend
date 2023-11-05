@@ -35,19 +35,17 @@ const SignIn = () => {
     // GET request to fetch user details
    await axios
      .get("api/user", {
-       email: 'guest@123.gmail.com',
+       email: email,
        headers: {
          "Content-Type": "application/json",
        },
      })
      .then((response) => {
-       console.log(response);
+       console.log("response = "+response.data[0]);
        const userDetails = response.data[0];
        const userName = userDetails.UserName;
        const gameUid = `name${userDetails.UserId}`;
        context.setUser({
-         email: email,
-         uid: userDetails.UserId,
          name: userName,
          gameUid: gameUid,
        });

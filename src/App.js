@@ -25,6 +25,7 @@ import AboutPage from "./utils/AboutPage.js";
 function App() {
   const [user, setUser] = useState(null);
 //  const [isAdmin, setIsAdmin] = useState(false);
+
   getAuth(app);
   return (
     <Router>
