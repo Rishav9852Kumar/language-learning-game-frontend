@@ -16,10 +16,15 @@ import {
   CardFooter,
   CardHeader,
 } from "reactstrap";
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
 import { Link } from "react-router-dom"; // You may need to import Link for navigation
 
 import "firebase/auth";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
 import { PlayerContext } from "../context/playerContext";
@@ -31,31 +36,43 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false); // To track loading state
 
-  const handleSignUp = () => {
-    if (email === "") {
-      toast("Enter Valid email", {
-        type: "warning",
-      });
-    } else if (password === "") {
-      toast("Enter Valid password", {
-        type: "warning",
-      });
-    } else {
-      const auth = getAuth(app);
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          context.setUser({ email: user.email, uid: user.uid });
-          fetchUserDetails(user.email);
-        })
-        .catch((error) => {
-          console.log(error);
-          toast(error.message, {
-            type: "error",
-          });
-        });
-    }
-  };
+ const handleSignUp = () => {
+   if (email === "") {
+     toast("Enter a valid email", {
+       type: "warning",
+     });
+   } else if (password === "") {
+     toast("Enter a valid password", {
+       type: "warning",
+     });
+   } else {
+     const auth = getAuth(app);
+
+     // Set Auth state persistence to 'SESSION'
+     setPersistence(auth, browserLocalPersistence)
+       .then(() => {
+         // Continue with sign-up
+         createUserWithEmailAndPassword(auth, email, password)
+           .then((userCredential) => {
+             const user = userCredential.user;
+             context.setUser({ email: user.email, uid: user.uid });
+             fetchUserDetails(user.email);
+           })
+           .catch((error) => {
+             console.log(error);
+             toast(error.message, {
+               type: "error",
+             });
+           });
+       })
+       .catch((error) => {
+         console.log(error);
+         toast(error.message, {
+           type: "error",
+         });
+       });
+   }
+ };
   const fetchUserDetails = async (email) => {
     setIsLoading(true);
     try {

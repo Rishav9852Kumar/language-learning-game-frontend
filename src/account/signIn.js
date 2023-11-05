@@ -1,6 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import { FiUnlock } from "react-icons/fi";
 import { app } from "../config/firebase-config";
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
 import axios from "axios";
 import {
   Container,
@@ -18,7 +23,7 @@ import {
 } from "reactstrap";
 
 import "firebase/auth";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserContext } from "../context/userContext";
 import { PlayerContext } from "../context/playerContext.js";
 import { Navigate } from "react-router-dom";
@@ -82,29 +87,41 @@ const fetchUserDetails = async (email) => {
   }
 };
 
-  const handleSignin = () => {
-    const auth = getAuth(app);
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        // ...
-        console.log(user);
-        context.setUser({ email: user.email, uid: user.uid });
+const handleSignin = () => {
+  const auth = getAuth(app);
 
-        // Fetch user details from the API and update context
-        fetchUserDetails(user.email);
-         console.log("context user= " + context.user);
+  // Set Auth state persistence to 'LOCAL'
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      // Sign in with email and password
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
 
-         console.log("context player= " + playerContext.player);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast(error.message, {
-          type: "error",
+          context.setUser({ email: user.email, uid: user.uid });
+
+          // Fetch user details from the API and update context
+          fetchUserDetails(user.email);
+          console.log("context user= " + context.user);
+          console.log("context player= " + playerContext.player);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast(error.message, {
+            type: "error",
+          });
         });
+    })
+    .catch((error) => {
+      console.log(error);
+      toast(error.message, {
+        type: "error",
       });
-  };
+    });
+};
+
   useEffect(() => {
     // Show or hide progress toast based on isLoading state
     if (isLoading) {
