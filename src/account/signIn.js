@@ -50,6 +50,10 @@ const SignIn = () => {
          name: userName,
          gameUid: gameUid,
        });
+       console.log("context.user = "+context.user);
+       console.log("context.user.name = "+context.user.name);
+        console.log("context.user.gameUid = "+context.user.gameUid);
+        context.log("context.user.uid = "+context.user.uid);
        setIsLoading(false);
        toast("Account Logged in", {
          type: "success",
