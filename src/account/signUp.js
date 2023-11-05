@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios"; // Import axios for making API requests
+import { app } from "../config/firebase-config";
 import {
   Container,
   Form,
@@ -38,7 +39,7 @@ const SignUp = () => {
         type: "warning",
       });
     } else {
-      const auth = getAuth();
+      const auth = getAuth(app);
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed up

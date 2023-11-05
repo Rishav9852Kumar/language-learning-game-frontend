@@ -1,8 +1,8 @@
 import React ,{useState} from 'react';
 import './App.css';
 import { UserContext } from "./context/userContext.js";
-import { initializeApp } from "firebase/app";
-//import { config } from "dotenv";
+import { app } from "./config/firebase-config.js";
+import { getAuth } from "firebase/auth";
 
 // react-router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -22,21 +22,10 @@ import User from "./account/user.js";
 import LeaderBoard from "./account/leaderBoard.js";
 import AboutPage from "./utils/AboutPage.js";
 
-//config(); // Load environment variables from .env file
-const firebaseConfig = {
-  apiKey: "AIzaSyC37R05nqLbthBkll7-vh_FYe3iR7koqOg",
-  authDomain: "language-learning-game-auth.firebaseapp.com",
-  projectId: "language-learning-game-auth",
-  storageBucket: "language-learning-game-auth.appspot.com",
-  messagingSenderId: "1061857104452",
-  appId: "1:1061857104452:web:0b2af7f961bf31e59c2211",
-  measurementId: "G-ZJBH8E0SJ7",
-};
-initializeApp(firebaseConfig);
-
 function App() {
   const [user, setUser] = useState(null);
 //  const [isAdmin, setIsAdmin] = useState(false);
+  getAuth(app);
   return (
     <Router>
       <ToastContainer />

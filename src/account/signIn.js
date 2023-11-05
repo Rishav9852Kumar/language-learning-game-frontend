@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { FiUnlock } from "react-icons/fi";
+import { app } from "../config/firebase-config";
 import {
   Container,
   Form,
@@ -27,7 +28,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("Strong@123");
 
   const handleSignin = () => {
-    const auth = getAuth();
+    const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
