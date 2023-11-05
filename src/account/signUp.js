@@ -44,7 +44,7 @@ const SignUp = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-
+          console.log(user);
           context.setUser({ email: user.email, uid: user.uid });
 
           // Fetch user details from the API and update context
@@ -58,65 +58,65 @@ const SignUp = () => {
         });
     }
   };
-const fetchUserDetails = (email) => {
-  setIsLoading(true); // Show loading indicator
+  const fetchUserDetails = (email) => {
+    setIsLoading(true); // Show loading indicator
 
-  // PUT request to create a user
-  axios
-    .put(
-      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
-      {
-        email: email,
-      }
-    )
-    .then((response) => {
-      const userDetails = response.data[0];
-      context.setUser({
-        name: userDetails.name,
-        gameUid: userDetails.UserId,
-      });
-      toast("Account Created", {
-        type: "success",
-      });
-
-      // Now, make a GET request to fetch user details
-      axios
-        .get(
-          "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
-          {
-            params: { email: email },
-          }
-        )
-        .then((response) => {
-          const userDetails = response.data[0];
-          context.setUser({
-            name: userDetails.name,
-            gameUid: userDetails.UserId,
-          });
-        })
-        .catch((error) => {
-          console.error("Error fetching user details: ", error);
-        })
-        .finally(() => {
-          setIsLoading(false); // Hide loading indicator
+    // PUT request to create a user
+    axios
+      .put(
+        "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
+        {
+          email: email,
+        }
+      )
+      .then((response) => {
+        const userDetails = response.data[0];
+        context.setUser({
+          name: userDetails.name,
+          gameUid: userDetails.UserId,
         });
-    })
-    .catch((error) => {
-      console.error("Error creating a user: ", error);
-      setIsLoading(false); // Hide loading indicator
-    });
-};
- useEffect(() => {
-   // Show or hide progress toast based on isLoading state
-   if (isLoading) {
-     toast("Signing up...", {
-       type: "info",
-       autoClose: false, // Don't auto-close this toast
-     });
-   } else {
-     toast.dismiss(); // Dismiss any active toasts
-   }
- }, [isLoading]);
+        toast("Account Created", {
+          type: "success",
+        });
+
+        // Now, make a GET request to fetch user details
+        axios
+          .get(
+            "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
+            {
+              params: { email: email },
+            }
+          )
+          .then((response) => {
+            const userDetails = response.data[0];
+            context.setUser({
+              name: userDetails.name,
+              gameUid: userDetails.UserId,
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching user details: ", error);
+          })
+          .finally(() => {
+            setIsLoading(false); // Hide loading indicator
+          });
+      })
+      .catch((error) => {
+        console.error("Error creating a user: ", error);
+        setIsLoading(false); // Hide loading indicator
+      });
+  };
+  useEffect(() => {
+    // Show or hide progress toast based on isLoading state
+    if (isLoading) {
+      toast("Signing up...", {
+        type: "info",
+        autoClose: false, // Don't auto-close this toast
+      });
+    } else {
+      toast.dismiss(); // Dismiss any active toasts
+    }
+  }, [isLoading]);
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSignUp();

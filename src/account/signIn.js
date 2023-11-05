@@ -34,6 +34,7 @@ const SignIn = () => {
         // Signed in
         const user = userCredential.user;
         // ...
+        console.log(user);
         context.setUser({ email: user.email, uid: user.uid });
       })
       .catch((error) => {
