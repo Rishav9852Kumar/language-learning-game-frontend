@@ -58,6 +58,7 @@ const fetchUserDetails = async (email) => {
     });
 
     console.log("context user= " + context.user);
+
     console.log("context player= " + playerContext.player);
 
     setIsLoading(false);
@@ -93,6 +94,9 @@ const fetchUserDetails = async (email) => {
 
         // Fetch user details from the API and update context
         fetchUserDetails(user.email);
+         console.log("context user= " + context.user);
+
+         console.log("context player= " + playerContext.player);
       })
       .catch((error) => {
         console.log(error);

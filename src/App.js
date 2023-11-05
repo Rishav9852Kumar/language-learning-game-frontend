@@ -25,7 +25,7 @@ import AboutPage from "./utils/AboutPage.js";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [player, setPlayer] = useState(false);
+  const [player, setPlayer] = useState(null);
 
   getAuth(app);
   return (
