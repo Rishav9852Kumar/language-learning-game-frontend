@@ -31,32 +31,31 @@ const SignIn = () => {
 
 const fetchUserDetails = async (email) => {
   try {
-    const response = await axios.get("api/user", {
-      params: {
-        email: email,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.get(
+      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
+      {
+        params: {
+          email: email,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     console.log("response = " + response);
     console.log("response.data = " + response.data);
     const userDetails = response.data[0];
     const userName = userDetails.UserName;
-    const gameUid = `name${userDetails.UserId}`;
+    const gameUid = userDetails.UserId;
 
-    context.setUser({
+    context.setPlayer({
       name: userName,
       gameUid: gameUid,
     });
 
-    console.log("context = " + context);
-    console.log("context.user = " + context.user);
-    console.log("context.user.name = " + context.user.name);
-    console.log("context.user.gameUid = " + context.user.gameUid);
-
-    context.log("context.user.uid = " + context.user.uid);
+    console.log("context user= " + context.user);
+    console.log("context player= " + context.player);
 
     setIsLoading(false);
 

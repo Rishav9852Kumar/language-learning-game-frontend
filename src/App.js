@@ -24,13 +24,13 @@ import AboutPage from "./utils/AboutPage.js";
 
 function App() {
   const [user, setUser] = useState(null);
-//  const [isAdmin, setIsAdmin] = useState(false);
+  const [player, setPlayer] = useState(false);
 
   getAuth(app);
   return (
     <Router>
       <ToastContainer />
-      <UserContext.Provider value={{ user, setUser}}>
+      <UserContext.Provider value={{ user, setUser, player,setPlayer}}>
         <Header />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
