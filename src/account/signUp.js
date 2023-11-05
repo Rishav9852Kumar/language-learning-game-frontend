@@ -42,12 +42,8 @@ const SignUp = () => {
       const auth = getAuth(app);
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed up
           const user = userCredential.user;
-          console.log(user);
           context.setUser({ email: user.email, uid: user.uid });
-
-          // Fetch user details from the API and update context
           fetchUserDetails(user.email);
         })
         .catch((error) => {
@@ -59,51 +55,60 @@ const SignUp = () => {
     }
   };
   const fetchUserDetails = (email) => {
-    setIsLoading(true); // Show loading indicator
-
-    // PUT request to create a user
+    setIsLoading(true);
+const requestData = { email: email };
     axios
-      .put(
-        "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
-        {
-          email: email,
-        }
-      )
+      .put("/api/user", {
+        data: requestData,
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+      })
       .then((response) => {
-        const userDetails = response.data[0];
-        context.setUser({
-          name: userDetails.name,
-          gameUid: userDetails.UserId,
-        });
-        toast("Account Created", {
-          type: "success",
-        });
-
-        // Now, make a GET request to fetch user details
-        axios
-          .get(
-            "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
-            {
-              params: { email: email },
-            }
-          )
-          .then((response) => {
-            const userDetails = response.data[0];
-            context.setUser({
-              name: userDetails.name,
-              gameUid: userDetails.UserId,
-            });
-          })
-          .catch((error) => {
-            console.error("Error fetching user details: ", error);
-          })
-          .finally(() => {
-            setIsLoading(false); // Hide loading indicator
+        if (response.status === 200) {
+          const userDetails = response.data[0];
+          context.setUser({
+            name: userDetails.UserName,
+            gameUid: `name${userDetails.UserId}`,
           });
+          toast("Account Created", {
+            type: "success",
+          });
+          axios
+            .get("/api/user", {
+              data: requestData,
+              headers: {
+                "Content-Type": "application/json", // Set the content type to JSON
+              },
+            })
+            .then((response) => {
+              const userDetails = response.data[0];
+              context.setUser({
+                name: userDetails.UserName,
+                gameUid: `name${userDetails.UserId}`,
+              });
+            })
+            .catch((error) => {
+              toast(error.message, {
+                type: "error",
+              });
+              console.error("Error fetching user details: ", error);
+            })
+            .finally(() => {
+              setIsLoading(false);
+            });
+        } else if (response.status === 404) {
+          toast("Unable to find account data", {
+            type: "error",
+          });
+        }
       })
       .catch((error) => {
+        toast(error.message, {
+          type: "error",
+        });
         console.error("Error creating a user: ", error);
-        setIsLoading(false); // Hide loading indicator
+        setIsLoading(false);
       });
   };
   useEffect(() => {

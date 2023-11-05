@@ -1,6 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FiUnlock } from "react-icons/fi";
 import { app } from "../config/firebase-config";
+import axios from "axios";
 import {
   Container,
   Form,
@@ -26,6 +27,49 @@ const SignIn = () => {
   const context = useContext(UserContext);
   const [email, setEmail] = useState("guest@123.gmail.com");
   const [password, setPassword] = useState("Strong@123");
+  const [isLoading, setIsLoading] = useState(false); // To track loading state
+
+  const fetchUserDetails = async (email) => {
+    setIsLoading(true); // Show loading indicator
+    
+    // GET request to fetch user details
+   await axios
+     .get("api/user", {
+       email: 'guest@123.gmail.com',
+       headers: {
+         "Content-Type": "application/json",
+       },
+     })
+     .then((response) => {
+       console.log(response);
+       const userDetails = response.data[0];
+       const userName = userDetails.UserName;
+       const gameUid = `name${userDetails.UserId}`;
+       context.setUser({
+         email: email,
+         uid: userDetails.UserId,
+         name: userName,
+         gameUid: gameUid,
+       });
+       setIsLoading(false);
+       toast("Account Logged in", {
+         type: "success",
+       });
+     })
+     .catch((error) => {
+       console.log(error);
+       setIsLoading(false);
+       if (error.status === 404) {
+         toast("Unable to find account data", {
+           type: "error",
+         });
+       } else {
+         toast(error.message, {
+           type: "error",
+         });
+       }
+     });
+  };
 
   const handleSignin = () => {
     const auth = getAuth(app);
@@ -36,15 +80,28 @@ const SignIn = () => {
         // ...
         console.log(user);
         context.setUser({ email: user.email, uid: user.uid });
+
+        // Fetch user details from the API and update context
+        fetchUserDetails(user.email);
       })
       .catch((error) => {
         console.log(error);
         toast(error.message, {
           type: "error",
         });
-        // ..
       });
   };
+  useEffect(() => {
+    // Show or hide progress toast based on isLoading state
+    if (isLoading) {
+      toast("Signing up...", {
+        type: "info",
+        autoClose: true, //  auto-close this toast
+      });
+    } else {
+      toast.dismiss(); // Dismiss any active toasts
+    }
+  }, [isLoading]);
   const defaultlogin = () => {
     setEmail("guest@123.gmail.com");
     setPassword("Strong@123");
