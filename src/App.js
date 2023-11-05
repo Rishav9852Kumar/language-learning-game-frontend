@@ -1,9 +1,9 @@
-import React ,{useState} from 'react';
+import React ,{useState, useEffect} from 'react';
 import './App.css';
 import { UserContext } from "./context/userContext.js";
 import { PlayerContext } from "./context/playerContext.js";
 import { app } from "./config/firebase-config.js";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 
 // react-router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -27,25 +27,37 @@ function App() {
   const [user, setUser] = useState(null);
   const [player, setPlayer] = useState(null);
 
-  getAuth(app);
+  const auth = getAuth(app);
+
+  // Set session persistence to 'LOCAL'
+  useEffect(() => {
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        // Session persistence is set
+      })
+      .catch((error) => {
+        console.error("Error setting session persistence:", error);
+      });
+  }, [auth]);
+
   return (
     <Router>
       <ToastContainer />
-      <UserContext.Provider value={{ user, setUser}}>
-      <PlayerContext.Provider value={{ player, setPlayer }}>
-        <Header />
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route exact path="/signin" element={<SignIn />} />
-          <Route exact path="/signup" element={<SignUp />} />
-          <Route exact path="/user/admin" element={<AdminPage />} />
-          <Route exact path="/user" element={<User />} />
-          <Route exact path="/user/leaderboard" element={<LeaderBoard />} />
-          <Route exact path="/about" element={<AboutPage />} />
-          <Route exact path="*" element={<PageNotFound />} />
-        </Routes>
-        <Footer />
-      </PlayerContext.Provider>
+      <UserContext.Provider value={{ user, setUser }}>
+        <PlayerContext.Provider value={{ player, setPlayer }}>
+          <Header />
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route exact path="/signin" element={<SignIn />} />
+            <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/user/admin" element={<AdminPage />} />
+            <Route exact path="/user" element={<User />} />
+            <Route exact path="/user/leaderboard" element={<LeaderBoard />} />
+            <Route exact path="/about" element={<AboutPage />} />
+            <Route exact path="*" element={<PageNotFound />} />
+          </Routes>
+          <Footer />
+        </PlayerContext.Provider>
       </UserContext.Provider>
     </Router>
   );
