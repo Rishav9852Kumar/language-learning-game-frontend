@@ -34,7 +34,7 @@ const SignIn = () => {
 const fetchUserDetails = async (email) => {
   try {
     const response = await axios.get(
-      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
+      "api/user",
       {
         params: {
           email: email,
