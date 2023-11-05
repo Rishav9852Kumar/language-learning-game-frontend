@@ -20,11 +20,13 @@ import {
 import "firebase/auth";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { UserContext } from "../context/userContext";
+import { PlayerContext } from "../context/playerContext.js";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const SignIn = () => {
   const context = useContext(UserContext);
+  const playerContext = useContext(PlayerContext);
   const [email, setEmail] = useState("guest@123.gmail.com");
   const [password, setPassword] = useState("Strong@123");
   const [isLoading, setIsLoading] = useState(false); // To track loading state
@@ -49,13 +51,14 @@ const fetchUserDetails = async (email) => {
     const userName = userDetails.UserName;
     const gameUid = userDetails.UserId;
 
-    context.setPlayer({
+    playerContext.setPlayer({
+      email: email,
       name: userName,
       gameUid: gameUid,
     });
 
     console.log("context user= " + context.user);
-    console.log("context player= " + context.player);
+    console.log("context player= " + playerContext.player);
 
     setIsLoading(false);
 

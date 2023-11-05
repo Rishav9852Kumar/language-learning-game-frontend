@@ -1,6 +1,7 @@
 import React ,{useState} from 'react';
 import './App.css';
 import { UserContext } from "./context/userContext.js";
+import { PlayerContext } from "./context/playerContext.js";
 import { app } from "./config/firebase-config.js";
 import { getAuth } from "firebase/auth";
 
@@ -30,7 +31,8 @@ function App() {
   return (
     <Router>
       <ToastContainer />
-      <UserContext.Provider value={{ user, setUser, player,setPlayer}}>
+      <UserContext.Provider value={{ user, setUser}}>
+      <PlayerContext.Provider value={{ player, setPlayer }}>
         <Header />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
@@ -43,6 +45,7 @@ function App() {
           <Route exact path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
+      </PlayerContext.Provider>
       </UserContext.Provider>
     </Router>
   );
