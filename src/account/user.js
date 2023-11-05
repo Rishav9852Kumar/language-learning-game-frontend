@@ -13,7 +13,7 @@ const User = () => {
   
   const name = playerContext.player.name || "guest";
   const email = playerContext.player.email;
-  const gameUid = context.user.uid;
+  const gameUid = context.user.gameUid || "usernot logged in ";
   // Now you can safely access the user's name   
   return (
     <div>
