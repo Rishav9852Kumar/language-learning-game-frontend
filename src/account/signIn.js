@@ -29,50 +29,55 @@ const SignIn = () => {
   const [password, setPassword] = useState("Strong@123");
   const [isLoading, setIsLoading] = useState(false); // To track loading state
 
-  const fetchUserDetails = async (email) => {
-    setIsLoading(true); // Show loading indicator
+const fetchData = async (email) => {
+  try {
+    const response = await axios.get('api/user', {
+      params: {
+        email: email,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('response = ' + response);
+    console.log('response.data = ' + response.data);
+    const userDetails = response.data[0];
+    const userName = userDetails.UserName;
+    const gameUid = `name${userDetails.UserId}`;
     
-    // GET request to fetch user details
-   await axios
-     .get("api/user", {
-       email: email,
-       headers: {
-         "Content-Type": "application/json",
-       },
-     })
-     .then((response) => {
-       console.log("response = "+response);
-       console.log("response.data = "+response.data);
-       const userDetails = response.data[0];
-       const userName = userDetails.UserName;
-       const gameUid = `name${userDetails.UserId}`;
-       context.setUser({
-         name: userName,
-         gameUid: gameUid,
-       });
-       console.log("context.user = "+context.user);
-       console.log("context.user.name = "+context.user.name);
-        console.log("context.user.gameUid = "+context.user.gameUid);
-        context.log("context.user.uid = "+context.user.uid);
-       setIsLoading(false);
-       toast("Account Logged in", {
-         type: "success",
-       });
-     })
-     .catch((error) => {
-       console.log(error);
-       setIsLoading(false);
-       if (error.status === 404) {
-         toast("Unable to register account", {
-           type: "error",
-         });
-       } else {
-         toast(error.message, {
-           type: "error",
-         });
-       }
-     });
-  };
+    context.setUser({
+      name: userName,
+      gameUid: gameUid,
+    });
+
+    console.log('context = ' + context);
+    console.log('context.user = ' + context.user);
+    console.log('context.user.name = ' + context.user.name);
+    console.log('context.user.gameUid = ' + context.user.gameUid);
+    
+    context.log('context.user.uid = ' + context.user.uid);
+    
+    setIsLoading(false);
+    
+    toast('Account Logged in', {
+      type: 'success',
+    });
+  } catch (error) {
+    console.error(error);
+    setIsLoading(false);
+
+    if (error.response && error.response.status === 404) {
+      toast('Unable to register account', {
+        type: 'error',
+      });
+    } else {
+      toast(error.message, {
+        type: 'error',
+      });
+    }
+  }
+};
 
   const handleSignin = () => {
     const auth = getAuth(app);
