@@ -41,7 +41,8 @@ const SignIn = () => {
        },
      })
      .then((response) => {
-       console.log("response = "+response.data[0]);
+       console.log("response = "+response);
+       console.log("response.data = "+response.data);
        const userDetails = response.data[0];
        const userName = userDetails.UserName;
        const gameUid = `name${userDetails.UserId}`;
@@ -58,7 +59,7 @@ const SignIn = () => {
        console.log(error);
        setIsLoading(false);
        if (error.status === 404) {
-         toast("Unable to find account data", {
+         toast("Unable to register account", {
            type: "error",
          });
        } else {
@@ -92,7 +93,7 @@ const SignIn = () => {
   useEffect(() => {
     // Show or hide progress toast based on isLoading state
     if (isLoading) {
-      toast("Signing up...", {
+      toast("Signing in...", {
         type: "info",
         autoClose: true, //  auto-close this toast
       });
