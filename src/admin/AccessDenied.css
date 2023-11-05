@@ -1,0 +1,38 @@
+/* Access Denied Page Styles */
+.access-denied-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa; /* Light gray background */
+}
+
+.access-denied-message {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.login-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-options a {
+  margin: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 18px;
+  background-color: #007bff; /* Blue background color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-options a:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}

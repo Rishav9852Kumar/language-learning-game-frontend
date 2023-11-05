@@ -1,0 +1,43 @@
+/* Add custom CSS styles for the Leaderboard page */
+.leaderboard-container {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  height: 100vh;
+  width: 100vw;
+}
+
+.leaderboard-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.category-dropdown {
+  width: 200px;
+  text-align: left;
+}
+
+.player-table {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the table header */
+.player-table thead {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Style table rows */
+.player-table tbody tr:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+
+/* Style table rows on hover */
+.player-table tbody tr:hover {
+  background-color: #e9ecef;
+}
