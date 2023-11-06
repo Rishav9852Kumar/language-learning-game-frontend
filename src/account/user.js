@@ -7,10 +7,13 @@ const User = () => {
   const context = useContext(UserContext);
   const playerContext = useContext(PlayerContext);
   // Check if context.user is null or undefined
- if (!playerContext.gameUid?.gameUid) {
+  
+ if (!context.user?.uid) {
    return <Navigate to="/signin" />;
  }
-  
+ if(!playerContext.player?.gameUid){
+   return <Navigate to="/signin" />;
+  }
   const name = playerContext.player.name | "guest";
   const email = context.user.email;
   const gameUid = playerContext.player.gameUid | "user not logged in ";
