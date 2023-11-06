@@ -12,11 +12,6 @@
   align-items: center;
 }
 
-.footer-logo img {
-  max-width: 100px;
-  height: auto;
-}
-
 .footer-links ul {
   list-style: none;
   padding: 0;
@@ -38,3 +33,5 @@
   text-align: center;
   margin-top: 10px;
 }
+
+

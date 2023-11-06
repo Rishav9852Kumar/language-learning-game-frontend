@@ -1,35 +1,34 @@
 import React from "react";
+import { Container, Row, Col } from "reactstrap";
+import { Link } from "react-router-dom";
 import "./Footer.css";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import logo from "../gallery/logo.png"; // Import the image
 
-const footer = () => {
+const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-logo">
-          <img src={logo} alt="Your Logo" />
-        </div>
-        <div className="footer-links">
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/user/leaderboard">Leaderboard</Link>
-            </li>
-            <li>
-              <Link to="/user/admin">Admin</Link>
-            </li>
-            <li>
-              <Link to="/user">User</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <Container>
+        <Row>
+          <Col xs={12} className="footer-links">
+            <ul className="justify-content-end">
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/user/leaderboard">Leaderboard</Link>
+              </li>
+              <li>
+                <Link to="/user/admin">Admin</Link>
+              </li>
+              <li>
+                <Link to="/user">User</Link>
+              </li>
+            </ul>
+          </Col>
+        </Row>
+      </Container>
       <div className="footer-text">
         &copy; 2023 Language Learning Game (LLG). All rights reserved.
       </div>
@@ -37,4 +36,4 @@ const footer = () => {
   );
 };
 
-export default footer;
+export default Footer;
