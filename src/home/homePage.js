@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Card, Dropdown } from "react-bootstrap";
 import "./HomePage.css";
 import easyLevelImage from "../gallery/easy.png";
 import mediumLevelImage from "../gallery/medium.png";
 import hardLevelImage from "../gallery/hard.png";
+import { useNavigate } from "react-router-dom";
+import { IsGameOnContext } from "../context/isGameOn"; // Import the context
 
 const HomePage = () => {
   const [chosenLanguage, setChosenLanguage] = useState("English"); // Default language
+  const isGameOnContext = useContext(IsGameOnContext);
+
+  const navigate = useNavigate();
+
+  const handlePlayNowClick = () => {
+    // Update isGameOn to true when "Play Now" is clicked
+     isGameOnContext.setIsGameOn(true);
+    // Redirect to the game page
+    navigate("/game"); // Assuming the route for the game page is "/game"
+  };
 
   const handleLanguageChange = (language) => {
     setChosenLanguage(language);
@@ -15,22 +27,19 @@ const HomePage = () => {
   const games = [
     {
       title: `Language Game 1 (${chosenLanguage})`,
-      imgURL: easyLevelImage ,
-      link: "/game1",
+      imgURL: easyLevelImage,
       level: "Easy",
       description: `Learn basic vocabulary in a fun way (${chosenLanguage}).`,
     },
     {
       title: `Language Game 2 (${chosenLanguage})`,
-      imgURL: mediumLevelImage ,
-      link: "/game2",
+      imgURL: mediumLevelImage,
       level: "Medium",
-      description: `Practice medium level question when you want to get serious (${chosenLanguage}).`,
+      description: `Practice medium level questions when you want to get serious (${chosenLanguage}).`,
     },
     {
       title: `Language Game 3 (${chosenLanguage})`,
-      imgURL: hardLevelImage ,
-      link: "/game3",
+      imgURL: hardLevelImage,
       level: "Hard",
       description: `Challenge yourself with advanced grammar exercises (${chosenLanguage}).`,
     },
@@ -70,7 +79,7 @@ const HomePage = () => {
                   <Card.Text className="game-description">
                     {game.description}
                   </Card.Text>
-                  <Card.Link href={game.link} className="game-link">
+                  <Card.Link className="game-link" onClick={handlePlayNowClick}>
                     Play Now
                   </Card.Link>
                 </Card.Body>

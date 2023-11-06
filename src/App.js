@@ -2,6 +2,7 @@ import React ,{useState, useEffect} from 'react';
 import './App.css';
 import { UserContext } from "./context/userContext.js";
 import { PlayerContext } from "./context/playerContext.js";
+import {IsGameOnContext} from "./context/isGameOn.js"
 import { app } from "./config/firebase-config.js";
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 
@@ -22,10 +23,13 @@ import AdminPage from "./admin/adminPage.js";
 import User from "./account/user.js";
 import LeaderBoard from "./account/leaderBoard.js";
 import AboutPage from "./utils/AboutPage.js";
+import GamePage from "./components/GamePage";
 
 function App() {
   const [user, setUser] = useState(null);
   const [player, setPlayer] = useState(null);
+  const [isGameOn, setIsGameOn] = useState(false);
+
 
   const auth = getAuth(app);
 
@@ -45,18 +49,21 @@ function App() {
       <ToastContainer />
       <UserContext.Provider value={{ user, setUser }}>
         <PlayerContext.Provider value={{ player, setPlayer }}>
-          <Header />
-          <Routes>
-            <Route exact path="/" element={<HomePage />} />
-            <Route exact path="/signin" element={<SignIn />} />
-            <Route exact path="/signup" element={<SignUp />} />
-            <Route exact path="/user/admin" element={<AdminPage />} />
-            <Route exact path="/user" element={<User />} />
-            <Route exact path="/user/leaderboard" element={<LeaderBoard />} />
-            <Route exact path="/about" element={<AboutPage />} />
-            <Route exact path="*" element={<PageNotFound />} />
-          </Routes>
-          <Footer />
+          <IsGameOnContext.Provider value={{ isGameOn, setIsGameOn }}>
+            <Header />
+            <Routes>
+              <Route exact path="/" element={<HomePage />} />
+              <Route exact path="/signin" element={<SignIn />} />
+              <Route exact path="/signup" element={<SignUp />} />
+              <Route exact path="/user/admin" element={<AdminPage />} />
+              <Route exact path="/user" element={<User />} />
+              <Route exact path="/user/leaderboard" element={<LeaderBoard />} />
+              <Route exact path="/about" element={<AboutPage />} />
+              <Route exact path="/game" element={<GamePage />} />
+              <Route exact path="*" element={<PageNotFound />} />
+            </Routes>
+            <Footer />
+          </IsGameOnContext.Provider>
         </PlayerContext.Provider>
       </UserContext.Provider>
     </Router>
