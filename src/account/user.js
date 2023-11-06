@@ -1,30 +1,147 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/userContext";
-import { PlayerContext } from "../context/playerContext.js";
+import { PlayerContext } from "../context/playerContext";
 import { Navigate } from "react-router-dom";
+import {
+  Container,
+  Card,
+  CardBody,
+  CardTitle,
+  Table,
+  Button,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Input,
+} from "reactstrap";
+import "./user.css";
 
 const User = () => {
   const context = useContext(UserContext);
   const playerContext = useContext(PlayerContext);
-  // Check if context.user is null or undefined
-  
- if (!context.user?.uid) {
-   return <Navigate to="/signin" />;
- }
- if(!playerContext.player?.gameUid){
-   return <Navigate to="/signin" />;
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userSubjects, setUserSubjects] = useState([]); // User's subjects data
+  const [subjectList, setSubjectList] = useState([]); // Dropdown list of subjects
+  const [selectedSubject, setSelectedSubject] = useState("");
+
+  useEffect(() => {
+    // Fetch user's subjects data
+    fetch("userSubjectsApiEndpoint")
+      .then((response) => response.json())
+      .then((data) => {
+        setUserSubjects(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user subjects:", error);
+      });
+
+    // Fetch the list of subjects for the dropdown
+    fetch("subjectListApiEndpoint")
+      .then((response) => response.json())
+      .then((data) => {
+        setSubjectList(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching subject list:", error);
+      });
+  }, []);
+
+  if (!context.user?.uid) {
+    return <Navigate to="/signin" />;
   }
-  const name = playerContext.player.name | "guest";
+  if (!playerContext.player?.gameUid) {
+    return <Navigate to="/signin" />;
+  }
+
+  const name = playerContext.player.name || "guest";
   const email = context.user.email;
-  const gameUid = playerContext.player.gameUid | "user not logged in ";
-  console.log(name);
-  // Now you can safely access the user's name   
+  const gameUid = playerContext.player.gameUid || "user not logged in";
+
+  const handleResetProgress = () => {
+    // Add your logic for resetting progress here
+  };
+
+  const handleDeleteSubject = () => {
+    // Add your logic for deleting a subject here
+  };
+
+  const handleAddSubject = () => {
+    // Add your logic for adding a subject here
+  };
+
   return (
-    <div>
-      <h1>Hello, {name}</h1>
-      <p>Email: {email}</p>
-      <p>User GameID: {gameUid}</p>
-    </div>
+    <Container fluid className="user-container">
+      <div className="user-details">
+        <h1 className="user-heading">Hello, {name}</h1>
+        <p className="user-info">Email: {email}</p>
+        <p className="user-info">User GameID: {gameUid}</p>
+      </div>
+
+      <Card className="user-card">
+        <CardBody>
+          <CardTitle className="user-card-title">Subject List</CardTitle>
+          <Table bordered responsive>
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Rank</th>
+                <th>Assignments Completed</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userSubjects.map((subject, index) => (
+                <tr key={index}>
+                  <td>{subject.name}</td>
+                  <td>{subject.score}</td>
+                  <td>{subject.rank}</td>
+                  <td>{subject.assignmentsCompleted}</td>
+                  <td>
+                    <Dropdown
+                      isOpen={dropdownOpen}
+                      toggle={() => setDropdownOpen(!dropdownOpen)}
+                    >
+                      <DropdownToggle caret>Actions</DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem onClick={handleResetProgress}>
+                          Reset Progress
+                        </DropdownItem>
+                        <DropdownItem onClick={handleDeleteSubject}>
+                          Delete
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Input
+            type="select"
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+            className="subject-dropdown"
+          >
+            <option value="">Select a Subject</option>
+            {subjectList.map((subject, index) => (
+              <option key={index} value={subject.name}>
+                {subject.name}
+              </option>
+            ))}
+          </Input>
+          <Button
+            color="primary"
+            className="add-subject-button"
+            onClick={handleAddSubject}
+          >
+            Add Subject
+          </Button>
+        </CardBody>
+      </Card>
+    </Container>
   );
 };
 
