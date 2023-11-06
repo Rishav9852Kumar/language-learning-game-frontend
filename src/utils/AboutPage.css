@@ -1,3 +1,5 @@
+/* AboutPage.css */
+
 .about-container {
   padding: 20px;
 }
@@ -34,14 +36,13 @@
 
 .about-list {
   list-style: disc;
-  margin-left: 20px;
   padding-left: 20px;
   font-size: 18px;
   line-height: 1.4;
   color: #495057;
 }
 
-.tech-stack-logo {
+.tech-image {
   max-width: 100%;
   height: auto;
   margin-top: 20px;
@@ -50,7 +51,7 @@
 .your-image {
   max-width: 100%;
   height: auto;
-  margin-top: 20px;
+  margin: 20px auto; /* Center-align the image */
 }
 
 .about-contact-info {
@@ -68,4 +69,24 @@
 .about-list a {
   text-decoration: none;
   color: #007bff;
+}
+
+/* Center-align the ListGroup items in mobile view */
+@media (max-width: 576px) {
+  .about-list {
+    text-align: center;
+    padding-left: 0;
+  }
+}
+/* AboutPage.css */
+
+.tech-images {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tech-image {
+  max-width: 100px; /* Adjust the size as needed */
+  height: auto;
+  margin-top: 20px;
 }

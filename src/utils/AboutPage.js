@@ -11,7 +11,8 @@ import {
   ListGroupItem,
 } from "reactstrap";
 import "./AboutPage.css";
-import techStackLogo from "../gallery/tech-stack-logo.png";
+import techImage1 from "../gallery/tech-stack-logo.png";
+import techImage2 from "../gallery/tech-stack-logo.png";
 import yourImage from "../gallery/my-image.png";
 
 const AboutPage = () => {
@@ -47,11 +48,14 @@ const AboutPage = () => {
           <p className="about-description">
             Our game is built using the following tools and technologies:
           </p>
-          <img
-            src={techStackLogo}
-            alt="Tech Stack Logo"
-            className="tech-stack-logo"
-          />
+          <Row>
+            <Col xs={12} sm={6} md={6} lg={3}>
+              <img src={techImage1} alt="Tech 1" className="tech-image" />
+            </Col>
+            <Col xs={12} sm={6} md={6} lg={3}>
+              <img src={techImage2} alt="Tech 2" className="tech-image" />
+            </Col>
+          </Row>
         </Col>
         <Col className="about-content">
           <img src={yourImage} alt="Your" className="your-image" />
