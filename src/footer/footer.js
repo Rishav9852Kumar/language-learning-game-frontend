@@ -8,8 +8,8 @@ const Footer = () => {
     <footer className="footer">
       <Container>
         <Row>
-          <Col xs={12} className="footer-links">
-            <ul className="justify-content-end">
+          <Col xs={12} sm={6} className="footer-links">
+            <ul>
               <li>
                 <Link to="/">Home</Link>
               </li>
@@ -27,11 +27,11 @@ const Footer = () => {
               </li>
             </ul>
           </Col>
+          <Col sm={6} className="footer-text">
+            &copy; 2023 Language Learning Game (LLG). All rights reserved.
+          </Col>
         </Row>
       </Container>
-      <div className="footer-text">
-        &copy; 2023 Language Learning Game (LLG). All rights reserved.
-      </div>
     </footer>
   );
 };
