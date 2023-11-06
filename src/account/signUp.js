@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import axios from "axios"; // Import axios for making API requests
+//import axios from "axios"; // Import axios for making API requests
 import { app } from "../config/firebase-config";
 import {
   Container,
@@ -76,36 +76,21 @@ const SignUp = () => {
   const fetchUserDetails = async (email) => {
     setIsLoading(true);
     try {
-      const response = await axios.put(
-        "api/user",
-        { email },
+      // Make a PUT request
+      const putResponse = await fetch(
+        "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "PUT",
+          body: JSON.stringify({ email }),
         }
       );
 
-      console.log("response = " + response);
-      console.log("response.data = " + response.data);
+      console.log("putResponse = ", putResponse);
 
-      if (response.status === 200) {
-        
-        const secondResponse = await axios.get(
-          "api/user",
-          { email },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+      if (putResponse.ok) {
+        const userDetails = await putResponse.json();
 
-        console.log("secondResponse = " + secondResponse);
-        console.log("secondResponse.data = " + secondResponse.data);
-
-        if (secondResponse.status === 200) {
-          const userDetails = secondResponse.data[0];
+        if (userDetails && userDetails.UserId) {
           const userName = userDetails.UserName;
           const gameUid = userDetails.UserId;
 
@@ -118,26 +103,26 @@ const SignUp = () => {
           toast("Account Created", {
             type: "success",
           });
-        }else{
-          toast(response.data, {
+        } else {
+          toast("Invalid user details in the response", {
             type: "error",
           });
-          console.log("context player = " + playerContext.player);
         }
-        setIsLoading(false);
-      } else if (response.status === 404) {
-        toast("Unable to create player account"+ response, {
+      } else if (putResponse.status === 404) {
+        toast("Unable to create player account", {
           type: "error",
         });
       }
-    } catch (error) {
-      console.error("failed to create player account : "+error);
       setIsLoading(false);
-        toast(error.message, {
-          type: "error",
-        });
+    } catch (error) {
+      console.error("Failed to create player account: " + error);
+      setIsLoading(false);
+      toast("Error while creating player account: " + error.message, {
+        type: "error",
+      });
     }
   };
+
   useEffect(() => {
     // Show or hide progress toast based on isLoading state
     if (isLoading) {

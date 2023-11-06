@@ -14,19 +14,14 @@ const LeaderBoard = () => {
       const apiUrl =
         `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/leaderboard?subjectName=${selectedCategory}`;
       try {
-       fetch(apiUrl, {
-         method: "GET",
-         headers: {
-           "X-RapidAPI-Key": "your-api-key",
-           "X-RapidAPI-Host": "jokes-by-api-ninjas.p.rapidapi.com",
-         },
-       })
-         .then((response) => response.json())
-         .then((data) => {
-           setPlayers(data);
-           console.log(data);
-         })
-         .catch((error) => console.log(error));
+        const response = await fetch(apiUrl);
+        console.log(response);
+        if (response.ok) {
+          const data = await response.json();
+          setPlayers(data);
+        } else {
+          console.error("Failed to fetch player data");
+        }
       } catch (error) {
         console.error("Error while fetching player data:", error);
       }
@@ -61,7 +56,7 @@ const LeaderBoard = () => {
         <thead>
           <tr>
             <th>Rank</th>
-            <th>Player</th>
+            <th>Player id </th>
             <th>Score</th>
           </tr>
         </thead>

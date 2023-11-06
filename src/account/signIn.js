@@ -6,7 +6,7 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
-import axios from "axios";
+//import axios from "axios";
 import {
   Container,
   Form,
@@ -37,55 +37,55 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false); // To track loading state
 
 const fetchUserDetails = async (email) => {
+  const apiUrl =
+    "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user?email=" +
+    email;
+
   try {
-    const response = await axios.get(
-      "api/user",
-      {
-        params: {
-          email: email,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(apiUrl, {
+      method: "GET"
+    });
+
+    if (response.ok) {
+      const userDetails = await response.json();
+      const userName = userDetails.UserName;
+      const gameUid = userDetails.UserId;
+
+      playerContext.setPlayer({
+        email: email,
+        name: userName,
+        gameUid: gameUid,
+      });
+     
+     console.log("user logged in ... " + userDetails.UserName);
+
+      setIsLoading(false);
+
+      toast("Account Logged in", {
+        type: "success",
+      });
+    } else {
+      console.error("Failed to fetch user data");
+
+      if (response.status === 404) {
+        toast("Unable to register account", {
+          type: "error",
+        });
+      } else {
+        toast("Error while fetching user data", {
+          type: "error",
+        });
       }
-    );
-
-    console.log("response = " + response);
-    console.log("response.data = " + response.data);
-    const userDetails = response.data[0];
-    const userName = userDetails.UserName;
-    const gameUid = userDetails.UserId;
-
-    playerContext.setPlayer({
-      email: email,
-      name: userName,
-      gameUid: gameUid,
-    });
-
-    console.log("context user= " + context.user);
-
-    console.log("context player= " + playerContext.player);
-
-    setIsLoading(false);
-
-    toast("Account Logged in", {
-      type: "success",
-    });
+    }
   } catch (error) {
     console.error(error);
     setIsLoading(false);
-
-    if (error.response && error.response.status === 404) {
-      toast("Unable to register account", {
-        type: "error",
-      });
-    } else {
-      toast(error.message, {
-        type: "error",
-      });
-    }
+    toast("Error while fetching user data", {
+      type: "error",
+    });
   }
 };
+
 
 const handleSignin = () => {
   const auth = getAuth(app);
