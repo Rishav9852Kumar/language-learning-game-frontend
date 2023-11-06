@@ -3,27 +3,30 @@ import { Container, Dropdown, Table } from "react-bootstrap";
 import "./LeaderBoard.css";
 
 const LeaderBoard = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Overall"); // Default category
-  const [players, setPlayers] = useState([]); // Initial empty player list
+  const [selectedCategory, setSelectedCategory] = useState("English"); 
+  const [players, setPlayers] = useState([]); 
 
-  const categories = ["Overall", "Easy", "Medium", "Hard"]; // Add more categories as needed
+  const categories = ["English", "Deutsch", "French", "Spanish"]; 
 
-  // Simulate fetching player data from an API (you can replace this with your actual API call)
   useEffect(() => {
     // Simulate an API call to get the list of players based on the selected category
-    // Replace this with your actual API endpoint
     const fetchPlayers = async () => {
-      // Example API endpoint (replace with your actual endpoint)
-      const apiUrl = `/api/players?category=${selectedCategory}`;
-
+      const apiUrl =
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/leaderboard?subjectName=${selectedCategory}`;
       try {
-        const response = await fetch(apiUrl);
-        if (response.ok) {
-          const data = await response.json();
-          setPlayers(data);
-        } else {
-          console.error("Failed to fetch player data");
-        }
+       fetch(apiUrl, {
+         method: "GET",
+         headers: {
+           "X-RapidAPI-Key": "your-api-key",
+           "X-RapidAPI-Host": "jokes-by-api-ninjas.p.rapidapi.com",
+         },
+       })
+         .then((response) => response.json())
+         .then((data) => {
+           setPlayers(data);
+           console.log(data);
+         })
+         .catch((error) => console.log(error));
       } catch (error) {
         console.error("Error while fetching player data:", error);
       }
@@ -41,7 +44,7 @@ const LeaderBoard = () => {
           id="category-dropdown"
           className="category-dropdown"
         >
-          Category: {selectedCategory}
+          Language: {selectedCategory}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {categories.map((category) => (
@@ -66,8 +69,8 @@ const LeaderBoard = () => {
           {players.map((player, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
-              <td>{player.name}</td>
-              <td>{player.score}</td>
+              <td>{player.UserId}</td>
+              <td>{player.SubjectScore}</td>
             </tr>
           ))}
         </tbody>
