@@ -2,6 +2,7 @@
 
 .about-container {
   padding: 20px;
+  overflow-x: auto; 
 }
 
 .about-content {
@@ -42,16 +43,21 @@
   color: #495057;
 }
 
+.tech-images {
+  display: flex;
+  justify-content: space-between;
+}
+
 .tech-image {
-  max-width: 100%;
+  max-width: 100px;
   height: auto;
   margin-top: 20px;
 }
 
 .your-image {
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
-  margin: 20px auto; /* Center-align the image */
+  margin: 20px auto; 
 }
 
 .about-contact-info {
@@ -71,22 +77,10 @@
   color: #007bff;
 }
 
-/* Center-align the ListGroup items in mobile view */
+
 @media (max-width: 576px) {
   .about-list {
     text-align: center;
     padding-left: 0;
   }
-}
-/* AboutPage.css */
-
-.tech-images {
-  display: flex;
-  justify-content: space-between;
-}
-
-.tech-image {
-  max-width: 100px; /* Adjust the size as needed */
-  height: auto;
-  margin-top: 20px;
 }
