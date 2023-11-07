@@ -78,10 +78,9 @@ const SignUp = () => {
     try {
       // Make a PUT request
       const putResponse = await fetch(
-        "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user",
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user?email=${email}`,
         {
-          method: "PUT",
-          body: JSON.stringify({ email }),
+          method: "POST",
         }
       );
 

@@ -74,12 +74,56 @@ const User = () => {
   const handleResetProgress = (subjectId) => {
     // Add your logic for resetting progress here for the subject with the given subjectId
     console.log("Resetting progress for subject with ID:", subjectId);
+    resetProgress(subjectId);
   };
+
+  async function resetProgress(subjectId) {
+    try {
+      // Make a PUT request to reset the subject's progress
+      await fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}&subjectId=${subjectId}&score=0`,
+        {
+          method: "PUT",
+        }
+      );
+      // After a successful request, refetch the user subjects
+      const userSubjectsResponse = await fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
+      );
+      const userData = await userSubjectsResponse.json();
+      setUserSubjects(userData);
+      console.log("Progress reset for subject with ID:", subjectId);
+    } catch (error) {
+      console.error("Error resetting progress:", error);
+    }
+  }
 
   const handleDeleteSubject = (subjectId) => {
     // Add your logic for deleting a subject here for the subject with the given subjectId
     console.log("Deleting subject with ID:", subjectId);
+    deleteSubject(subjectId);
   };
+
+  async function deleteSubject(subjectId) {
+    try {
+      // Make a DELETE request to delete the subject
+      await fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}&subjectId=${subjectId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      // After a successful request, refetch the user subjects
+      const userSubjectsResponse = await fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
+      );
+      const userData = await userSubjectsResponse.json();
+      setUserSubjects(userData);
+      console.log("Subject deleted with ID:", subjectId);
+    } catch (error) {
+      console.error("Error deleting subject:", error);
+    }
+  }
 
   const handleAddSubject = () => {
     // Add your logic for adding a subject here
@@ -106,7 +150,7 @@ const User = () => {
       setUserSubjects(userData);
       // Clear the selected subject
       setSelectedSubject("");
-      console.log("Subject added :", selectedSubject);
+      console.log("Subject added:", subjectName);
     } catch (error) {
       console.error("Error adding subject:", error);
     }
