@@ -71,16 +71,19 @@ const User = () => {
   const email = context.user.email;
   const gameUid = playerContext.player.gameUid || "user not logged in";
 
-  const handleResetProgress = () => {
-    // Add your logic for resetting progress here
+  const handleResetProgress = (subjectId) => {
+    // Add your logic for resetting progress here for the subject with the given subjectId
+    console.log("Resetting progress for subject :", subjectId);
   };
 
-  const handleDeleteSubject = () => {
-    // Add your logic for deleting a subject here
+  const handleDeleteSubject = (subjectId) => {
+    // Add your logic for deleting a subject here for the subject with the given subjectId
+    console.log("Deleting subject :", subjectId);
   };
 
   const handleAddSubject = () => {
     // Add your logic for adding a subject here
+    console.log("Adding subject:", selectedSubject);
   };
 
   return (
@@ -121,10 +124,18 @@ const User = () => {
                     >
                       <DropdownToggle caret>Actions</DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem onClick={handleResetProgress}>
+                        <DropdownItem
+                          onClick={() =>
+                            handleResetProgress(subject.SubjectName)
+                          }
+                        >
                           Reset Progress
                         </DropdownItem>
-                        <DropdownItem onClick={handleDeleteSubject}>
+                        <DropdownItem
+                          onClick={() =>
+                            handleDeleteSubject(subject.SubjectName)
+                          }
+                        >
                           Delete
                         </DropdownItem>
                       </DropdownMenu>
