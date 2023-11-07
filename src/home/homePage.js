@@ -5,19 +5,22 @@ import easyLevelImage from "../gallery/easy.png";
 import mediumLevelImage from "../gallery/medium.png";
 import hardLevelImage from "../gallery/hard.png";
 import { useNavigate } from "react-router-dom";
-import { IsGameOnContext } from "../context/isGameOn"; // Import the context
+import { GameContext } from "../context/isGameOn";
 
 const HomePage = () => {
   const [chosenLanguage, setChosenLanguage] = useState("English"); // Default language
-  const isGameOnContext = useContext(IsGameOnContext);
+  const gameContext = useContext(GameContext);
 
   const navigate = useNavigate();
 
-  const handlePlayNowClick = () => {
-    // Update isGameOn to true when "Play Now" is clicked
-     isGameOnContext.setIsGameOn(true);
-    // Redirect to the game page
-    navigate("/game"); // Assuming the route for the game page is "/game"
+  const handlePlayNowClick = (level) => {
+
+    gameContext.setGame({
+      isGameOn: true,
+      gameLanguage: chosenLanguage,
+      gameLevel: level,
+    });
+    navigate("/game"); 
   };
 
   const handleLanguageChange = (language) => {
@@ -43,7 +46,6 @@ const HomePage = () => {
       level: "Hard",
       description: `Challenge yourself with advanced grammar exercises (${chosenLanguage}).`,
     },
-    // Add more games as needed
   ];
 
   return (
@@ -61,7 +63,6 @@ const HomePage = () => {
             <Dropdown.Item onClick={() => handleLanguageChange("Spanish")}>
               Spanish
             </Dropdown.Item>
-            {/* Add more language options as needed */}
           </Dropdown.Menu>
         </Dropdown>
         <Row>
@@ -79,7 +80,10 @@ const HomePage = () => {
                   <Card.Text className="game-description">
                     {game.description}
                   </Card.Text>
-                  <Card.Link className="game-link" onClick={handlePlayNowClick}>
+                  <Card.Link
+                    className="game-link"
+                    onClick={() => handlePlayNowClick(game.level)}
+                  >
                     Play Now
                   </Card.Link>
                 </Card.Body>

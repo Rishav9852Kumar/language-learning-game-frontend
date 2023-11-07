@@ -1,10 +1,14 @@
-import React ,{useState, useEffect} from 'react';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
 import { UserContext } from "./context/userContext.js";
 import { PlayerContext } from "./context/playerContext.js";
-import {IsGameOnContext} from "./context/isGameOn.js"
+import { GameContext } from "./context/isGameOn.js";
 import { app } from "./config/firebase-config.js";
-import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
 
 // react-router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -28,16 +32,12 @@ import GamePage from "./components/GamePage";
 function App() {
   const [user, setUser] = useState(null);
   const [player, setPlayer] = useState(null);
-  const [isGameOn, setIsGameOn] = useState(false);
-
-
+  const [game, setGame] = useState(null);
   const auth = getAuth(app);
 
-  // Set session persistence to 'LOCAL'
   useEffect(() => {
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
-        // Session persistence is set
       })
       .catch((error) => {
         console.error("Error setting session persistence:", error);
@@ -49,7 +49,7 @@ function App() {
       <ToastContainer />
       <UserContext.Provider value={{ user, setUser }}>
         <PlayerContext.Provider value={{ player, setPlayer }}>
-          <IsGameOnContext.Provider value={{ isGameOn, setIsGameOn }}>
+          <GameContext.Provider value={{ game, setGame }}>
             <Header />
             <Routes>
               <Route exact path="/" element={<HomePage />} />
@@ -63,7 +63,7 @@ function App() {
               <Route exact path="*" element={<PageNotFound />} />
             </Routes>
             <Footer />
-          </IsGameOnContext.Provider>
+          </GameContext.Provider>
         </PlayerContext.Provider>
       </UserContext.Provider>
     </Router>

@@ -2,27 +2,31 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Button, Form, FormGroup, Input, Label } from "reactstrap";
 import FinalScorePopup from "./FinalScorePopup";
 import { useNavigate } from "react-router-dom";
-import { IsGameOnContext } from "../context/isGameOn"; // Import the context
-import "./GamePage.css"; // Import the CSS
+import { GameContext } from "../context/isGameOn"; 
+import "./GamePage.css"; 
 
-const GamePage = ({ selectedLanguage }) => {
+const GamePage = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
-  // Use the context to get the isGameOn state
-  const isGameOnContext = useContext(IsGameOnContext);
+  // Using the context to get the game information
+  const gameContext = useContext(GameContext);
+
+  const isGameOn = gameContext.game.isGameOn;
+  const gameLanguage = gameContext.game.gameLanguage;
+  const gameLevel = gameContext.game.gameLevel;
 
   useEffect(() => {
-    if (!isGameOnContext.isGameOn) {
+    if (!isGameOn) {
       navigate("/"); // Redirect to the homepage if the game is not active
     }
     const fetchQuestions = async () => {
       try {
         const response = await fetch(
-          `/api/questions?language=${selectedLanguage}`
+          `/api/questions?language=${gameLanguage}&level=${gameLevel}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -34,7 +38,7 @@ const GamePage = ({ selectedLanguage }) => {
     };
 
     fetchQuestions();
-  }, [selectedLanguage, isGameOnContext.isGameOn, navigate]);
+  }, [gameLanguage, gameLevel, isGameOn, navigate]);
 
   const handleAnswerSelection = (questionIndex, selectedOption) => {
     const updatedAnswers = [...answers];
@@ -60,7 +64,8 @@ const GamePage = ({ selectedLanguage }) => {
     <div className="game-page-container">
       <Container>
         <h2>Language Learning Game</h2>
-        <h3>Language: {selectedLanguage}</h3>
+        <h3>Language: {gameLanguage}</h3>
+        <h3>Level: {gameLevel}</h3>
         <Button
           className="submit-button"
           color="primary"

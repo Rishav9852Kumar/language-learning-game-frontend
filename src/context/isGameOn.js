@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export const IsGameOnContext = createContext();
+export const GameContext = createContext();
