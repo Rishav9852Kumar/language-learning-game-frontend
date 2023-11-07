@@ -21,21 +21,25 @@ const User = () => {
   const context = useContext(UserContext);
   const playerContext = useContext(PlayerContext);
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userSubjects, setUserSubjects] = useState([]); // User's subjects data
   const [subjectList, setSubjectList] = useState([]); // Dropdown list of subjects
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [openDropdowns, setOpenDropdowns] = useState({}); // Store the open/close state of each dropdown
 
   useEffect(() => {
     // Fetch user's subjects data
-    fetch("userSubjectsApiEndpoint")
-      .then((response) => response.json())
-      .then((data) => {
-        setUserSubjects(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user subjects:", error);
-      });
+    if (playerContext.player && playerContext.player.gameUid) {
+      fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setUserSubjects(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching user subjects:", error);
+        });
+    }
 
     // Fetch the list of subjects for the dropdown
     fetch("subjectListApiEndpoint")
@@ -46,7 +50,7 @@ const User = () => {
       .catch((error) => {
         console.error("Error fetching subject list:", error);
       });
-  }, []);
+  }, [playerContext.player]);
 
   if (!context.user?.uid) {
     return <Navigate to="/signin" />;
@@ -87,7 +91,6 @@ const User = () => {
               <tr>
                 <th>Subject</th>
                 <th>Score</th>
-                <th>Rank</th>
                 <th>Assignments Completed</th>
                 <th>Actions</th>
               </tr>
@@ -95,14 +98,18 @@ const User = () => {
             <tbody>
               {userSubjects.map((subject, index) => (
                 <tr key={index}>
-                  <td>{subject.name}</td>
-                  <td>{subject.score}</td>
-                  <td>{subject.rank}</td>
-                  <td>{subject.assignmentsCompleted}</td>
+                  <td>{subject.SubjectName}</td>
+                  <td>{subject.SubjectScore}</td>
+                  <td>{subject.ExercisesCompleted}</td>
                   <td>
                     <Dropdown
-                      isOpen={dropdownOpen}
-                      toggle={() => setDropdownOpen(!dropdownOpen)}
+                      isOpen={openDropdowns[subject.SubjectId] || false}
+                      toggle={() =>
+                        toggleDropdown(
+                          subject.SubjectId,
+                          !openDropdowns[subject.SubjectId]
+                        )
+                      }
                     >
                       <DropdownToggle caret>Actions</DropdownToggle>
                       <DropdownMenu>
@@ -127,8 +134,8 @@ const User = () => {
           >
             <option value="">Select a Subject</option>
             {subjectList.map((subject, index) => (
-              <option key={index} value={subject.name}>
-                {subject.name}
+              <option key={index} value={subject.SubjectName}>
+                {subject.SubjectName}
               </option>
             ))}
           </Input>
@@ -143,6 +150,13 @@ const User = () => {
       </Card>
     </Container>
   );
+
+  function toggleDropdown(subjectId, isOpen) {
+    setOpenDropdowns({
+      ...openDropdowns,
+      [subjectId]: isOpen,
+    });
+  }
 };
 
 export default User;
