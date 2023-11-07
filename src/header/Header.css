@@ -1,5 +1,5 @@
 /* Header.css */
-.header {
+.container-fluid {
   background-color: #007bff;
   color: #fff;
   padding: 20px;
@@ -8,29 +8,54 @@
   align-items: center;
 }
 
-.header-title {
-  font-size: 24px;
-  margin: 0;
-  font-weight: bold; /* Add a little more boldness to the text */
-}
-
-.header-title:hover {
+.container-fluid a {
+  text-decoration: none;
   color: #fff;
 }
 
-.header-nav ul {
-  list-style: none;
-  padding: 0;
+.container-fluid a:hover {
+  color: #fff;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  cursor: pointer;
+}
+
+.navbar-toggler-icon {
+  background-color: #fff;
+}
+
+.container-fluid .navbar-nav {
   display: flex;
 }
 
-.header-nav li {
+.container-fluid .navbar-nav .nav-item {
   margin-right: 20px;
 }
 
-.header-nav a {
+.container-fluid .navbar-nav .nav-item:last-child {
+  margin-right: 0;
+}
+
+.container-fluid .navbar-nav .nav-item .nav-link {
   color: #fff;
-  text-decoration: none;
   font-weight: bold;
   font-size: 16px;
+}
+
+.navbar-nav .navbar-text {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-end {
+  margin-left: auto;
+}
+
+.navbar-end .nav-link {
+  display: flex;
+  align-items: center;
 }

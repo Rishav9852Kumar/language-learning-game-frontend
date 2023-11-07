@@ -1,31 +1,99 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./Header.css";
-import { Navbar, Nav } from "react-bootstrap";
+import React, { useState, useContext } from "react";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  NavbarText,
+} from "reactstrap";
+import { IoIosLogOut } from "react-icons/io";
+import { VscAccount } from "react-icons/vsc";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import { PlayerContext } from "../context/playerContext";
 
 const Header = () => {
-  const [expanded, setExpanded] = useState(false);
+  const userContext = useContext(UserContext);
+  const playerContext = useContext(PlayerContext);
+  const navigate = useNavigate();
 
-  const handleToggle = () => {
-    setExpanded(!expanded);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen(!isOpen);
+
+  const handleSignOut = () => {
+    userContext.setUser(null);
+    playerContext.setPlayer(null);
+    navigate("/");
   };
 
   return (
-    <Navbar expand="lg" expanded={expanded} className="header">
-      <Navbar.Brand className="header-title">
-        Language Learning Game
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={handleToggle} />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ml-auto">
-          <Nav.Link as={Link} to="/signup">
-            Sign Up
-          </Nav.Link>
-          <Nav.Link as={Link} to="/signin">
-            Sign In
-          </Nav.Link>
+    <Navbar
+      color="primary"
+      light
+      expand="md"
+      className="container-fluid is-italic"
+    >
+      <NavbarBrand>
+        <Link to="/" className="text-white">
+          Language Learning Game
+        </Link>
+      </NavbarBrand>
+
+      <NavbarToggler onClick={toggle} />
+      <Collapse isOpen={isOpen} navbar>
+        <Nav className="ml-auto" navbar>
+          {userContext.user ? (
+            <>
+              <NavbarText className="text-white">
+                <VscAccount size={30} />{" "}
+                {userContext.user?.email ? userContext.user.email : ""}
+              </NavbarText>
+              <NavItem className="float-end">
+                <NavLink
+                  data-toggle="tooltip"
+                  data-placement="right"
+                  title="To Log out"
+                  onClick={handleSignOut}
+                  className="text-white offset-lg-3 navbar-end"
+                >
+                  Sign Out <IoIosLogOut size={30} />
+                </NavLink>
+              </NavItem>
+            </>
+          ) : (
+            <>
+              <NavItem>
+                <NavLink
+                  tag={Link}
+                  to="/signup"
+                  className="text-white ml-auto"
+                  data-toggle="tooltip"
+                  data-placement="right"
+                  title="To sign up as a new user"
+                >
+                  Sign Up
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  tag={Link}
+                  to="/signin"
+                  className="text-white ml-auto"
+                  data-toggle="tooltip"
+                  data-placement="right"
+                  title="Login to an existing account"
+                >
+                  Sign In
+                </NavLink>
+              </NavItem>
+            </>
+          )}
         </Nav>
-      </Navbar.Collapse>
+      </Collapse>
     </Navbar>
   );
 };
