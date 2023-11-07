@@ -2,38 +2,60 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Button, Form, FormGroup, Input, Label } from "reactstrap";
 import FinalScorePopup from "./FinalScorePopup";
 import { useNavigate } from "react-router-dom";
-import { GameContext } from "../context/isGameOn"; 
-import "./GamePage.css"; 
+import { GameContext } from "../context/isGameOn";
+import "./GamePage.css";
 
 const GamePage = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [score, setScore] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Using the context to get the game information
   const gameContext = useContext(GameContext);
-
   const isGameOn = gameContext.game.isGameOn;
   const gameLanguage = gameContext.game.gameLanguage;
   const gameLevel = gameContext.game.gameLevel;
 
   useEffect(() => {
+    setLoading(true);
+
     if (!isGameOn) {
-      navigate("/"); // Redirect to the homepage if the game is not active
+      navigate("/");
     }
+
     const fetchQuestions = async () => {
       try {
         const response = await fetch(
-          `/api/questions?language=${gameLanguage}&level=${gameLevel}`
+          `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/game/questions?subjectLanguage=${gameLanguage}&level=${gameLevel}`
         );
+
         if (response.ok) {
           const data = await response.json();
-          setQuestions(data.questions);
+          if (Array.isArray(data)) {
+            const formattedQuestions = data.map((question) => ({
+              text: question.Question,
+              options: [
+                question.OptionA,
+                question.OptionB,
+                question.OptionC,
+                question.OptionD,
+              ],
+              correctAnswer: question.CorrectAnswer,
+            }));
+            setQuestions(formattedQuestions);
+            setLoading(false);
+          } else {
+            console.error("No questions received from the API.");
+            setLoading(false);
+          }
+        } else {
+          console.error("API request failed with status: ", response.status);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching questions:", error);
+        setLoading(false);
       }
     };
 
@@ -47,16 +69,7 @@ const GamePage = () => {
   };
 
   const handleSubmit = () => {
-    let calculatedScore = 0;
-    for (let i = 0; i < questions.length; i++) {
-      if (answers[i] === questions[i].correctAnswer) {
-        calculatedScore++;
-      }
-    }
-    setScore(calculatedScore);
-
     // Make an API call to update the user's score (you need to implement this)
-
     setShowPopup(true);
   };
 
@@ -73,36 +86,41 @@ const GamePage = () => {
         >
           Submit
         </Button>
-        {questions.map((question, index) => (
-          <div key={index} className="question-container">
-            <p>{question.text}</p>
-            <Form>
-              <FormGroup tag="fieldset">
-                <legend>Options:</legend>
-                <ul>
-                  {question.options.map((option, optionIndex) => (
-                    <li key={optionIndex}>
-                      <FormGroup check>
-                        <Label check>
-                          <Input
-                            type="radio"
-                            name={`question-${index}`}
-                            value={option}
-                            onChange={() =>
-                              handleAnswerSelection(index, option)
-                            }
-                          />{" "}
-                          {option}
-                        </Label>
-                      </FormGroup>
-                    </li>
-                  ))}
-                </ul>
-              </FormGroup>
-            </Form>
-          </div>
-        ))}
-        {showPopup && <FinalScorePopup score={score} />}
+        {loading ? (
+          <p>Loading questions...</p>
+        ) : (
+          questions.map((question, index) => (
+            <div key={index} className="question-container">
+              <p className="question-text">{question.text}</p>
+              <Form>
+                <FormGroup tag="fieldset">
+                  <ul>
+                    {question.options.map((option, optionIndex) => (
+                      <li key={optionIndex}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="radio"
+                              name={`question-${index}`}
+                              value={option}
+                              onChange={() =>
+                                handleAnswerSelection(index, option)
+                              }
+                            />{" "}
+                            {option}
+                          </Label>
+                        </FormGroup>
+                      </li>
+                    ))}
+                  </ul>
+                </FormGroup>
+              </Form>
+            </div>
+          ))
+        )}
+        {showPopup && (
+          <FinalScorePopup questions={questions} answers={answers} />
+        )}
       </Container>
     </div>
   );

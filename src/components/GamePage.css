@@ -3,20 +3,14 @@
 /* Container styles */
 .game-page-container {
   background-color: #f2f2f2;
-  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  margin: 20px auto;
-  max-width: 600px;
-
-  /* Set the height to 100% of viewport height */
-  height: 100vh;
-
-  /* Center the content vertically and horizontally */
+  width: 100vw; /* Set the width to 100vw for full-width background */
+  min-height: 100vh; /* Set the minimum height to 100% of the viewport height */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
 }
 
 /* Title styles */
@@ -49,6 +43,8 @@ h3 {
 /* Question container styles */
 .question-container {
   margin-top: 20px;
+  max-height: 80vh; /* Limit the height of the question container */
+  overflow-y: auto; /* Add vertical scroll if needed */
 }
 
 /* Form styles */
@@ -62,6 +58,11 @@ form {
 /* Legend styles */
 legend {
   font-weight: bold;
+}
+
+/* Question text styles */
+.question-text {
+  font-size: 16px;
 }
 
 /* Options styles */
@@ -88,17 +89,15 @@ input[type="radio"] {
 }
 
 .popup {
-  display: none; /* Hide the popup by default */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1;
   overflow: auto;
-
-  /* Center the modal vertically and horizontally */
   display: flex;
   align-items: center;
   justify-content: center;

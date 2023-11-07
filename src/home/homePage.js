@@ -31,19 +31,19 @@ const HomePage = () => {
     {
       title: `Language Game 1 (${chosenLanguage})`,
       imgURL: easyLevelImage,
-      level: "Easy",
+      level: "easy",
       description: `Learn basic vocabulary in a fun way (${chosenLanguage}).`,
     },
     {
       title: `Language Game 2 (${chosenLanguage})`,
       imgURL: mediumLevelImage,
-      level: "Medium",
+      level: "medium",
       description: `Practice medium level questions when you want to get serious (${chosenLanguage}).`,
     },
     {
       title: `Language Game 3 (${chosenLanguage})`,
       imgURL: hardLevelImage,
-      level: "Hard",
+      level: "hard",
       description: `Challenge yourself with advanced grammar exercises (${chosenLanguage}).`,
     },
   ];
