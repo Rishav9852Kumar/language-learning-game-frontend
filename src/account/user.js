@@ -73,18 +73,44 @@ const User = () => {
 
   const handleResetProgress = (subjectId) => {
     // Add your logic for resetting progress here for the subject with the given subjectId
-    console.log("Resetting progress for subject :", subjectId);
+    console.log("Resetting progress for subject with ID:", subjectId);
   };
 
   const handleDeleteSubject = (subjectId) => {
     // Add your logic for deleting a subject here for the subject with the given subjectId
-    console.log("Deleting subject :", subjectId);
+    console.log("Deleting subject with ID:", subjectId);
   };
 
   const handleAddSubject = () => {
     // Add your logic for adding a subject here
-    console.log("Adding subject:", selectedSubject);
+    if (selectedSubject) {
+      addUserSubject(selectedSubject);
+      console.log("Adding subject:", selectedSubject);
+    }
   };
+
+  async function addUserSubject(subjectName) {
+    try {
+      // Make a POST request to add the subject
+      await fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}&subjectName=${subjectName}`,
+        {
+          method: "POST",
+        }
+      );
+      // After a successful request, refetch the user subjects
+      const userSubjectsResponse = await fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
+      );
+      const userData = await userSubjectsResponse.json();
+      setUserSubjects(userData);
+      // Clear the selected subject
+      setSelectedSubject("");
+      console.log("Subject added :", selectedSubject);
+    } catch (error) {
+      console.error("Error adding subject:", error);
+    }
+  }
 
   return (
     <Container fluid className="user-container">
@@ -125,16 +151,12 @@ const User = () => {
                       <DropdownToggle caret>Actions</DropdownToggle>
                       <DropdownMenu>
                         <DropdownItem
-                          onClick={() =>
-                            handleResetProgress(subject.SubjectName)
-                          }
+                          onClick={() => handleResetProgress(subject.SubjectId)}
                         >
                           Reset Progress
                         </DropdownItem>
                         <DropdownItem
-                          onClick={() =>
-                            handleDeleteSubject(subject.SubjectName)
-                          }
+                          onClick={() => handleDeleteSubject(subject.SubjectId)}
                         >
                           Delete
                         </DropdownItem>
