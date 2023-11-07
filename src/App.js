@@ -32,7 +32,11 @@ import GamePage from "./components/GamePage";
 function App() {
   const [user, setUser] = useState(null);
   const [player, setPlayer] = useState(null);
-  const [game, setGame] = useState(null);
+  const [game, setGame] = useState({
+    isGameOn: false, 
+    gameLanguage: null, 
+    gameLevel: null,
+  });
   const auth = getAuth(app);
 
   useEffect(() => {
