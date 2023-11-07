@@ -21,35 +21,43 @@ const User = () => {
   const context = useContext(UserContext);
   const playerContext = useContext(PlayerContext);
 
-  const [userSubjects, setUserSubjects] = useState([]); // User's subjects data
-  const [subjectList, setSubjectList] = useState([]); // Dropdown list of subjects
+  const [userSubjects, setUserSubjects] = useState([]);
+  const [subjectList, setSubjectList] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [openDropdowns, setOpenDropdowns] = useState({}); // Store the open/close state of each dropdown
+  const [openDropdowns, setOpenDropdowns] = useState({});
 
   useEffect(() => {
-    // Fetch user's subjects data
-    if (playerContext.player && playerContext.player.gameUid) {
-      fetch(
-        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setUserSubjects(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching user subjects:", error);
-        });
-    }
+    const fetchData = async () => {
+      // Fetch user's subjects data
+      if (playerContext.player && playerContext.player.gameUid) {
+        try {
+          const userSubjectsResponse = await fetch(
+            `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
+          );
+          const userData = await userSubjectsResponse.json();
+          setUserSubjects(userData);
 
-    // Fetch the list of subjects for the dropdown
-    fetch("subjectListApiEndpoint")
-      .then((response) => response.json())
-      .then((data) => {
-        setSubjectList(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching subject list:", error);
-      });
+          // Fetch the list of all subjects
+          const subjectListResponse = await fetch(
+            "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
+          );
+          const allSubjects = await subjectListResponse.json();
+
+          // Filter subjects that are not in the user's subject list
+          const filteredSubjects = allSubjects.filter(
+            (subject) =>
+              !userData.find(
+                (userSubject) => userSubject.SubjectName === subject.SubjectName
+              )
+          );
+          setSubjectList(filteredSubjects);
+        } catch (error) {
+          console.error("Error fetching user subjects or subject list:", error);
+        }
+      }
+    };
+
+    fetchData();
   }, [playerContext.player]);
 
   if (!context.user?.uid) {
