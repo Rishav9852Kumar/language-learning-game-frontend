@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Card, Dropdown } from "react-bootstrap";
 import "./HomePage.css";
 import easyLevelImage from "../gallery/easy.png";
@@ -6,21 +6,59 @@ import mediumLevelImage from "../gallery/medium.png";
 import hardLevelImage from "../gallery/hard.png";
 import { useNavigate } from "react-router-dom";
 import { GameContext } from "../context/isGameOn";
+import { PlayerContext } from "../context/playerContext";
 
 const HomePage = () => {
   const [chosenLanguage, setChosenLanguage] = useState("English"); // Default language
+  const [subjects, setSubjects] = useState([]); // State to store subjects
   const gameContext = useContext(GameContext);
+  const playerContext = useContext(PlayerContext);
 
   const navigate = useNavigate();
 
-  const handlePlayNowClick = (level) => {
+  useEffect(() => {
+    if (playerContext.player && playerContext.player.gameUid) {
+      // User is logged in, fetch user-specific languages
+      fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const subjectNames = data.map((subject) => subject.SubjectName);
 
+          const subjectsWithKeys = subjectNames.map((subjectName, index) => ({
+            SubjectId: index + 1, // Assign unique key
+            SubjectName: subjectName,
+          }));
+
+          setSubjects(subjectsWithKeys);
+        })
+        .catch((error) => {
+          console.error("Error fetching user-specific subjects:", error);
+        });
+    } else {
+      // User is not logged in, fetch the default subjects
+      fetch(
+        "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Subjects:", data);
+          setSubjects(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching subjects:", error);
+        });
+    }
+  }, [playerContext.player]); // Run this effect when the player context changes
+
+  const handlePlayNowClick = (level) => {
     gameContext.setGame({
       isGameOn: true,
       gameLanguage: chosenLanguage,
       gameLevel: level,
     });
-    navigate("/game"); 
+    navigate("/game");
   };
 
   const handleLanguageChange = (language) => {
@@ -57,12 +95,14 @@ const HomePage = () => {
             Choose Language: {chosenLanguage}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item onClick={() => handleLanguageChange("English")}>
-              English
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleLanguageChange("Spanish")}>
-              Spanish
-            </Dropdown.Item>
+            {subjects.map((subject) => (
+              <Dropdown.Item
+                key={subject.SubjectId}
+                onClick={() => handleLanguageChange(subject.SubjectName)}
+              >
+                {subject.SubjectName}
+              </Dropdown.Item>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
         <Row>
