@@ -1,24 +1,33 @@
-// Header.js
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
+import { Navbar, Nav } from "react-bootstrap";
 
-const header = () => {
+const Header = () => {
+  const [expanded, setExpanded] = useState(false);
+
+  const handleToggle = () => {
+    setExpanded(!expanded);
+  };
+
   return (
-    <header className="header">
-      <h1 className="header-title">Language Learning Game</h1>
-      <nav className="header-nav">
-        <ul>
-          <li>
-            <Link to="/signup">Sign Up</Link>
-          </li>
-          <li>
-            <Link to="/signin">Sign In</Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <Navbar expand="lg" expanded={expanded} className="header">
+      <Navbar.Brand className="header-title">
+        Language Learning Game
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={handleToggle} />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="ml-auto">
+          <Nav.Link as={Link} to="/signup">
+            Sign Up
+          </Nav.Link>
+          <Nav.Link as={Link} to="/signin">
+            Sign In
+          </Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
-export default header;
+export default Header;

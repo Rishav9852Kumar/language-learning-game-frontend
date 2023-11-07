@@ -11,6 +11,11 @@
 .header-title {
   font-size: 24px;
   margin: 0;
+  font-weight: bold; /* Add a little more boldness to the text */
+}
+
+.header-title:hover {
+  color: #fff;
 }
 
 .header-nav ul {
