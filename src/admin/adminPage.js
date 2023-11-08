@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
-import "./AdminPage.css"; // Import your CSS file
-//import AccessDenied from "./accessDenied ";
+import "./AdminPage.css";
 
 const AdminPage = () => {
   const [question, setQuestion] = useState({
@@ -11,7 +10,7 @@ const AdminPage = () => {
     OptionC: "",
     OptionD: "",
     CorrectAnswer: "",
-    QuestionLevel: 1, // Default to 1
+    QuestionLevel: 1,
     Language: "English",
   });
 
@@ -19,7 +18,7 @@ const AdminPage = () => {
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   useEffect(() => {
-    // Fetch total users and total questions from your API
+    // Fetching total users and total questions from your API
     fetch("/api/getTotalUsers")
       .then((response) => response.json())
       .then((data) => {
@@ -42,37 +41,32 @@ const AdminPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if the QuestionLevel is an integer in the range of 1 to 5
     const selectedLevel = parseInt(question.QuestionLevel);
     if (!isNaN(selectedLevel) && selectedLevel >= 1 && selectedLevel <= 5) {
-      // Send the question data to your API endpoint using fetch or Axios
-      const apiUrl = "/api/addQuestion"; // Replace with your actual API endpoint
+      const apiUrl = `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/game/questions?questionLevel=${selectedLevel}&subjectLanguage=${question.Language}&question=${question.Question}&optionA=${question.OptionA}&optionB=${question.OptionB}&optionC=${question.OptionC}&optionD=${question.OptionD}&correctAnswer=${question.CorrectAnswer}`;
 
-      // Make a POST request to the API to add the question
+      // Making a POST request to the API to add the question
       fetch(apiUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(question),
       })
-        .then((response) => response.json())
+        .then((response) => response.text())
         .then((data) => {
-          // Handle the API response here (e.g., show a success message)
-          console.log("Question added successfully:", data);
+          if (data === "Question was added successfully") {
+            console.log("question added");
+            alert("Question was added successfully");
+          } else {
+            alert("Failed to add the question. Please try again.");
+          }
         })
         .catch((error) => {
           console.error("Error adding question:", error);
+          alert("Failed to add the question. Please try again.");
         });
     } else {
       alert("Question level must be an integer in the range of 1 to 5.");
     }
   };
-// const { user } = useContext(UserContext);
 
-// if (!user.isadmin) {
-//   return <AccessDenied />;
-// }
   return (
     <Container className="admin-container my-5">
       <h1 className="admin-heading">Admin Page</h1>
@@ -90,7 +84,6 @@ const AdminPage = () => {
       </Card>
       <div className="question-form">
         <Form onSubmit={handleSubmit}>
-          {/* Form fields for question details */}
           <Form.Group controlId="question">
             <Form.Label>Question</Form.Label>
             <Form.Control
@@ -190,9 +183,9 @@ const AdminPage = () => {
                 setQuestion({ ...question, Language: e.target.value })
               }
             >
-              <option value="English">English</option>
-              <option value="Spanish">Spanish</option>
-              <option value="French">French</option>
+              <option value="english">English</option>
+              <option value="spanish">Spanish</option>
+              <option value="french">French</option>
               {/* Add more language options as needed */}
             </Form.Control>
           </Form.Group>
