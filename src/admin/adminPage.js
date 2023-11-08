@@ -16,8 +16,8 @@ const AdminPage = () => {
   };
 
   const [question, setQuestion] = useState({ ...initialQuestionState });
-  const [totalUsers, setTotalUsers] = useState([]); // Change to an array to store user data
-  const [totalQuestions, setTotalQuestions] = useState([]); // Change to an array to store question data
+  const [totalUsers, setTotalUsers] = useState([]); 
+  const [totalQuestions, setTotalQuestions] = useState([]); 
   const [languages, setLanguages] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [selectedLanguageUsers, setSelectedLanguageUsers] = useState(0);
@@ -49,7 +49,7 @@ const AdminPage = () => {
       });
   }, []);
 
-  // Fetch total questions for each language
+  // Fetching total questions for each language
   useEffect(() => {
     fetch(
       "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/admin/totalQuestions"

@@ -18,7 +18,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (playerContext.player && playerContext.player.gameUid) {
-      // User is logged in, fetch user-specific languages
+      // User is logged in, fetching user-specific languages
       fetch(
         `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
       )
@@ -27,7 +27,7 @@ const HomePage = () => {
           const subjectNames = data.map((subject) => subject.SubjectName);
 
           const subjectsWithKeys = subjectNames.map((subjectName, index) => ({
-            SubjectId: index + 1, // Assign unique key
+            SubjectId: index + 1, 
             SubjectName: subjectName,
           }));
 
@@ -37,7 +37,7 @@ const HomePage = () => {
           console.error("Error fetching user-specific subjects:", error);
         });
     } else {
-      // User is not logged in, fetch the default subjects
+      // User is not logged in, fetching the default subjects
       fetch(
         "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
       )
@@ -50,7 +50,7 @@ const HomePage = () => {
           console.error("Error fetching subjects:", error);
         });
     }
-  }, [playerContext.player]); // Run this effect when the player context changes
+  }, [playerContext.player]); // Running this effect when the player context changes
 
   const handlePlayNowClick = (level) => {
     gameContext.setGame({

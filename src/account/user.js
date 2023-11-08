@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/userContext";
 import { PlayerContext } from "../context/playerContext";
 import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   Container,
   Card,
@@ -28,7 +29,7 @@ const User = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch user's subjects data
+      // Fetching user's subjects data
       if (playerContext.player && playerContext.player.gameUid) {
         try {
           const userSubjectsResponse = await fetch(
@@ -37,13 +38,13 @@ const User = () => {
           const userData = await userSubjectsResponse.json();
           setUserSubjects(userData);
 
-          // Fetch the list of all subjects
+          // Fetching the list of all subjects
           const subjectListResponse = await fetch(
             "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
           );
           const allSubjects = await subjectListResponse.json();
 
-          // Filter subjects that are not in the user's subject list
+          // Filtering subjects that are not in the user's subject list
           const filteredSubjects = allSubjects.filter(
             (subject) =>
               !userData.find(
@@ -71,49 +72,46 @@ const User = () => {
   const email = context.user.email;
   const gameUid = playerContext.player.gameUid || "user not logged in";
 
-  const handleResetProgress = (subjectId) => {
-    // Add your logic for resetting progress here for the subject with the given subjectId
+  const handleResetProgress = async (subjectId) => {
     console.log("Resetting progress for subject with ID:", subjectId);
-    resetProgress(subjectId);
-  };
-
-  async function resetProgress(subjectId) {
     try {
-      // Make a PUT request to reset the subject's progress
-      await fetch(
-        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}&subjectId=${subjectId}&score=0`,
+      const response = await fetch(
+        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/game/userScore?userId=${playerContext.player.gameUid}&language=${subjectId}`,
         {
-          method: "PUT",
+          method: "POST",
         }
       );
-      // After a successful request, refetch the user subjects
-      const userSubjectsResponse = await fetch(
-        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
-      );
-      const userData = await userSubjectsResponse.json();
-      setUserSubjects(userData);
-      console.log("Progress reset for subject with ID:", subjectId);
+      if (response.ok) {
+        console.log("User score updated successfully");
+        // Refetching user's subjects
+        const userSubjectsResponse = await fetch(
+          `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
+        );
+        const userData = await userSubjectsResponse.json();
+        setUserSubjects(userData);
+         toast.success("User Progress Reset Done.");
+      } else {
+        console.error("Error resetting progress:", response.statusText);
+      }
     } catch (error) {
       console.error("Error resetting progress:", error);
     }
-  }
+  };
 
   const handleDeleteSubject = (subjectId) => {
-    // Add your logic for deleting a subject here for the subject with the given subjectId
     console.log("Deleting subject with ID:", subjectId);
+    toast.warning("Delete is disabled for now try (Reset).");
     deleteSubject(subjectId);
   };
 
   async function deleteSubject(subjectId) {
     try {
-      // Make a DELETE request to delete the subject
       await fetch(
         `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}&subjectId=${subjectId}`,
         {
           method: "DELETE",
         }
       );
-      // After a successful request, refetch the user subjects
       const userSubjectsResponse = await fetch(
         `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
       );
@@ -126,7 +124,6 @@ const User = () => {
   }
 
   const handleAddSubject = () => {
-    // Add your logic for adding a subject here
     if (selectedSubject) {
       addUserSubject(selectedSubject);
       console.log("Adding subject:", selectedSubject);
@@ -135,20 +132,20 @@ const User = () => {
 
   async function addUserSubject(subjectName) {
     try {
-      // Make a POST request to add the subject
+      // Making a POST request to add the subject
       await fetch(
         `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}&subjectName=${subjectName}`,
         {
           method: "POST",
         }
       );
-      // After a successful request, refetch the user subjects
+      // After a successful request, refetching the user subjects
       const userSubjectsResponse = await fetch(
         `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user/languages?userId=${playerContext.player.gameUid}`
       );
       const userData = await userSubjectsResponse.json();
       setUserSubjects(userData);
-      // Clear the selected subject
+      toast.success("New Subject Added.");
       setSelectedSubject("");
       console.log("Subject added:", subjectName);
     } catch (error) {
@@ -195,7 +192,9 @@ const User = () => {
                       <DropdownToggle caret>Actions</DropdownToggle>
                       <DropdownMenu>
                         <DropdownItem
-                          onClick={() => handleResetProgress(subject.SubjectId)}
+                          onClick={() =>
+                            handleResetProgress(subject.SubjectName)
+                          }
                         >
                           Reset Progress
                         </DropdownItem>

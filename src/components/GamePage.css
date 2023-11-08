@@ -5,8 +5,8 @@
   background-color: #f2f2f2;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  width: 100vw; /* Set the width to 100vw for full-width background */
-  min-height: 100vh; /* Set the minimum height to 100% of the viewport height */
+  width: 100vw; 
+  min-height: 100vh; 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -43,8 +43,8 @@ h3 {
 /* Question container styles */
 .question-container {
   margin-top: 20px;
-  max-height: 80vh; /* Limit the height of the question container */
-  overflow-y: auto; /* Add vertical scroll if needed */
+  max-height: 80vh; 
+  overflow-y: auto; 
 }
 
 /* Form styles */

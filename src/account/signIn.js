@@ -34,7 +34,7 @@ const SignIn = () => {
   const playerContext = useContext(PlayerContext);
   const [email, setEmail] = useState("guest@123.gmail.com");
   const [password, setPassword] = useState("Strong@123");
-  const [isLoading, setIsLoading] = useState(false); // To track loading state
+  const [isLoading, setIsLoading] = useState(false); 
 
 const fetchUserDetails = async (email) => {
   const apiUrl =
@@ -90,10 +90,9 @@ const fetchUserDetails = async (email) => {
 const handleSignin = () => {
   const auth = getAuth(app);
 
-  // Set Auth state persistence to 'LOCAL'
   setPersistence(auth, browserLocalPersistence)
     .then(() => {
-      // Sign in with email and password
+      // Siging in with email and password
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in
@@ -102,7 +101,7 @@ const handleSignin = () => {
 
           context.setUser({ email: user.email, uid: user.uid });
 
-          // Fetch user details from the API and update context
+          // Fetching user details from the API and update context
           fetchUserDetails(user.email);
           console.log("context user= " + context.user);
           console.log("context player= " + playerContext.player);
@@ -123,7 +122,6 @@ const handleSignin = () => {
 };
 
   useEffect(() => {
-    // Show or hide progress toast based on isLoading state
     if (isLoading) {
       toast("Signing in...", {
         type: "info",

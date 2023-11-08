@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./FinalScorePopup.css"; // Import a separate CSS file for the popup styles
+import "./FinalScorePopup.css";
 
 const FinalScorePopup = ({ questions, answers }) => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const FinalScorePopup = ({ questions, answers }) => {
     navigate("/"); // Navigate to the home page
   };
 
-  // Calculate scores and counts
+  // Calculating scores and counts
   const totalQuestions = questions.length;
   let correctCount = 0;
   let incorrectCount = 0;
@@ -25,7 +25,7 @@ const FinalScorePopup = ({ questions, answers }) => {
     }
   }
 
-  // Calculate the final score
+  // Calculating the final score
   const score = correctCount;
 
   return (

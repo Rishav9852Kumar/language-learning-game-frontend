@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-//import axios from "axios"; // Import axios for making API requests
+//import axios from "axios";
 import { app } from "../config/firebase-config";
 import {
   Container,
@@ -21,7 +21,7 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
-import { Link } from "react-router-dom"; // You may need to import Link for navigation
+import { Link } from "react-router-dom"; 
 
 import "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -34,7 +34,7 @@ const SignUp = () => {
   const playerContext = useContext(PlayerContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // To track loading state
+  const [isLoading, setIsLoading] = useState(false); 
 
  const handleSignUp = () => {
    if (email === "") {
@@ -48,7 +48,7 @@ const SignUp = () => {
    } else {
      const auth = getAuth(app);
 
-     // Set Auth state persistence to 'SESSION'
+     // Setting Auth state persistence to 'SESSION'
      setPersistence(auth, browserLocalPersistence)
        .then(() => {
          // Continue with sign-up
@@ -76,7 +76,7 @@ const SignUp = () => {
   const fetchUserDetails = async (email) => {
     setIsLoading(true);
     try {
-      // Make a PUT request
+      // Making a PUT request
       const putResponse = await fetch(
         `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/user?email=${email}`,
         {
@@ -123,7 +123,6 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    // Show or hide progress toast based on isLoading state
     if (isLoading) {
       toast("Signing up...", {
         type: "info",
