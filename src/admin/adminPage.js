@@ -17,21 +17,26 @@ const AdminPage = () => {
 
   const [question, setQuestion] = useState({ ...initialQuestionState });
   const [totalUsers, setTotalUsers] = useState([]); // Change to an array to store user data
-  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState([]); // Change to an array to store question data
   const [languages, setLanguages] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [selectedLanguageUsers, setSelectedLanguageUsers] = useState(0);
+  const [selectedLanguageQuestions, setSelectedLanguageQuestions] = useState(0);
 
   useEffect(() => {
-    fetch("/api/getTotalQuestions")
+    fetch(
+      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/admin/totalUsers"
+    )
       .then((response) => response.json())
       .then((data) => {
-        setTotalQuestions(data.totalQuestions);
+        setTotalUsers(data);
       })
       .catch((error) => {
-        console.error("Error fetching total questions:", error);
+        console.error("Error fetching total users:", error);
       });
+  }, []);
 
+  useEffect(() => {
     fetch(
       "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
     )
@@ -42,16 +47,19 @@ const AdminPage = () => {
       .catch((error) => {
         console.error("Error fetching languages:", error);
       });
+  }, []);
 
+  // Fetch total questions for each language
+  useEffect(() => {
     fetch(
-      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/admin/totalUsers"
+      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/admin/totalQuestions"
     )
       .then((response) => response.json())
       .then((data) => {
-        setTotalUsers(data);
+        setTotalQuestions(data);
       })
       .catch((error) => {
-        console.error("Error fetching total users:", error);
+        console.error("Error fetching total questions:", error);
       });
   }, []);
 
@@ -96,8 +104,19 @@ const AdminPage = () => {
       } else {
         setSelectedLanguageUsers(0);
       }
+
+      const selectedLanguageQuestion = totalQuestions.find(
+        (questionData) => questionData.subject === question.Language
+      );
+      if (selectedLanguageQuestion) {
+        setSelectedLanguageQuestions(
+          parseInt(selectedLanguageQuestion.totalQuestions)
+        );
+      } else {
+        setSelectedLanguageQuestions(0);
+      }
     }
-  }, [question.Language, totalUsers]);
+  }, [question.Language, totalUsers, totalQuestions]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -140,8 +159,8 @@ const AdminPage = () => {
       <Card className="mb-4">
         <Card.Body>
           <Card.Text className="admin-info">
-            Total Questions:{" "}
-            <span className="admin-count">{totalQuestions}</span>
+            Total Questions for {question.Language}:{" "}
+            <span className="admin-count">{selectedLanguageQuestions}</span>
           </Card.Text>
         </Card.Body>
       </Card>
