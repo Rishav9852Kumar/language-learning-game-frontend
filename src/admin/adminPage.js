@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import "./AdminPage.css";
+import { toast } from "react-toastify";
 
 const AdminPage = () => {
-  const [question, setQuestion] = useState({
+  const initialQuestionState = {
     Question: "",
     OptionA: "",
     OptionB: "",
@@ -12,13 +13,14 @@ const AdminPage = () => {
     CorrectAnswer: "",
     QuestionLevel: 1,
     Language: "English",
-  });
+  };
 
+  const [question, setQuestion] = useState({ ...initialQuestionState });
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   useEffect(() => {
-    // Fetching total users and total questions from your API
+    // Fetching total users and total questions from API
     fetch("/api/getTotalUsers")
       .then((response) => response.json())
       .then((data) => {
@@ -52,14 +54,17 @@ const AdminPage = () => {
         .then((response) => response.text())
         .then((data) => {
           if (data === "Question was added successfully") {
-            console.log("question added");
+            toast("Question Added Sucessfully", {
+              type: "success",
+            });
             alert("Question was added successfully");
+            setQuestion({ ...initialQuestionState }); // Reset the form
           } else {
             alert("Failed to add the question. Please try again.");
           }
         })
         .catch((error) => {
-          console.error("Error adding question:", error);
+          console.error("Error adding the question:", error);
           alert("Failed to add the question. Please try again.");
         });
     } else {
@@ -186,7 +191,6 @@ const AdminPage = () => {
               <option value="english">English</option>
               <option value="spanish">Spanish</option>
               <option value="french">French</option>
-              {/* Add more language options as needed */}
             </Form.Control>
           </Form.Group>
 
