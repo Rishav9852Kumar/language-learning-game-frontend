@@ -3,17 +3,28 @@ import { Container, Dropdown, Table } from "react-bootstrap";
 import "./LeaderBoard.css";
 
 const LeaderBoard = () => {
-  const [selectedCategory, setSelectedCategory] = useState("English"); 
-  const [players, setPlayers] = useState([]); 
-
-  const categories = ["English", "Spanish", "Russian", "French", "Deutsch"]; 
+  const [selectedCategory, setSelectedCategory] = useState("English");
+  const [players, setPlayers] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    // Simulate an API call to get the list of players based on the selected category
+    // Fetching available languages from the API
+    fetch(
+      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Languages:", data);
+        setCategories(data.map((language) => language.SubjectName));
+      })
+      .catch((error) => {
+        console.error("Error fetching languages:", error);
+      });
+
+    // Fetching the list of players based on the selected language(category from my dropdown)
     console.log("Selected Category:", selectedCategory);
     const fetchPlayers = async () => {
-      const apiUrl =
-        `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/leaderboard?subjectName=${selectedCategory}`;
+      const apiUrl = `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/leaderboard?subjectName=${selectedCategory}`;
       try {
         const response = await fetch(apiUrl);
         if (response.ok) {
