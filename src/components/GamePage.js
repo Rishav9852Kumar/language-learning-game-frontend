@@ -3,7 +3,9 @@ import { Container, Button, Form, FormGroup, Input, Label } from "reactstrap";
 import FinalScorePopup from "./FinalScorePopup";
 import { useNavigate } from "react-router-dom";
 import { GameContext } from "../context/isGameOn";
+import { PlayerContext } from "../context/playerContext"; // Import PlayerContext
 import "./GamePage.css";
+import { toast } from "react-toastify";
 
 const GamePage = () => {
   const [questions, setQuestions] = useState([]);
@@ -16,6 +18,8 @@ const GamePage = () => {
   const isGameOn = gameContext.game.isGameOn;
   const gameLanguage = gameContext.game.gameLanguage;
   const gameLevel = gameContext.game.gameLevel;
+
+  const playerContext = useContext(PlayerContext); // Get PlayerContext
 
   useEffect(() => {
     setLoading(true);
@@ -69,8 +73,33 @@ const GamePage = () => {
   };
 
   const handleSubmit = () => {
-    // Make an API call to update the user's score (you need to implement this)
     setShowPopup(true);
+
+    if (playerContext.player?.gameUid) {
+      // Check if gameUid exists in PlayerContext
+      const userId = playerContext.player?.gameUid;
+      const score = answers.filter(
+        (answer, index) => answer === questions[index].correctAnswer
+      ).length;
+
+      // Make an API call to update the user's score
+      const updateScoreUrl = `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/game/userScore?userId=${userId}&language=${gameLanguage}&score=${score}`;
+
+      fetch(updateScoreUrl, {
+        method: "POST",
+      })
+        .then((response) => {
+          if (response.ok) {
+            toast.success("User score updated!");
+          } else {
+            toast.error("Failed to update user score.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating user score:", error);
+          toast.error("Failed to update user score.");
+        });
+    }
   };
 
   return (
