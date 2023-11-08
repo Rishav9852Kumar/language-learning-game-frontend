@@ -18,6 +18,8 @@ const AdminPage = () => {
   const [question, setQuestion] = useState({ ...initialQuestionState });
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const [languages, setLanguages] = useState([]); // State variable to store available languages
+  const [formErrors, setFormErrors] = useState({}); // State variable to store form field errors
 
   useEffect(() => {
     // Fetching total users and total questions from API
@@ -38,13 +40,59 @@ const AdminPage = () => {
       .catch((error) => {
         console.error("Error fetching total questions:", error);
       });
+
+    // Fetching available languages from the API
+    fetch(
+      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Languages:", data);
+        setLanguages(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching languages:", error);
+      });
   }, []);
+
+  const validateForm = () => {
+    const errors = {};
+    if (!question.Question) {
+      errors.Question = "Question is required";
+    }
+    if (!question.OptionA) {
+      errors.OptionA = "Option A is required";
+    }
+    if (!question.OptionB) {
+      errors.OptionB = "Option B is required";
+    }
+    if (!question.OptionC) {
+      errors.OptionC = "Option C is required";
+    }
+    if (!question.OptionD) {
+      errors.OptionD = "Option D is required";
+    }
+    if (
+      isNaN(parseInt(question.QuestionLevel)) ||
+      question.QuestionLevel < 1 ||
+      question.QuestionLevel > 5
+    ) {
+      errors.QuestionLevel =
+        "Question level must be an integer in the range of 1 to 5";
+    }
+    if (!question.Language) {
+      errors.Language = "Language is required";
+    }
+    return errors;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const errors = validateForm();
+    setFormErrors(errors);
 
-    const selectedLevel = parseInt(question.QuestionLevel);
-    if (!isNaN(selectedLevel) && selectedLevel >= 1 && selectedLevel <= 5) {
+    if (Object.keys(errors).length === 0) {
+      const selectedLevel = parseInt(question.QuestionLevel);
       const apiUrl = `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/game/questions?questionLevel=${selectedLevel}&subjectLanguage=${question.Language}&question=${question.Question}&optionA=${question.OptionA}&optionB=${question.OptionB}&optionC=${question.OptionC}&optionD=${question.OptionD}&correctAnswer=${question.CorrectAnswer}`;
 
       // Making a POST request to the API to add the question
@@ -54,10 +102,9 @@ const AdminPage = () => {
         .then((response) => response.text())
         .then((data) => {
           if (data === "Question was added successfully") {
-            toast("Question Added Sucessfully", {
+            toast("Question Added Successfully", {
               type: "success",
             });
-            alert("Question was added successfully");
             setQuestion({ ...initialQuestionState }); // Reset the form
           } else {
             alert("Failed to add the question. Please try again.");
@@ -67,8 +114,6 @@ const AdminPage = () => {
           console.error("Error adding the question:", error);
           alert("Failed to add the question. Please try again.");
         });
-    } else {
-      alert("Question level must be an integer in the range of 1 to 5.");
     }
   };
 
@@ -99,6 +144,9 @@ const AdminPage = () => {
                 setQuestion({ ...question, Question: e.target.value })
               }
             />
+            {formErrors.Question && (
+              <span className="text-danger">{formErrors.Question}</span>
+            )}
           </Form.Group>
 
           <Form.Group controlId="optionA">
@@ -111,6 +159,9 @@ const AdminPage = () => {
                 setQuestion({ ...question, OptionA: e.target.value })
               }
             />
+            {formErrors.OptionA && (
+              <span className="text-danger">{formErrors.OptionA}</span>
+            )}
           </Form.Group>
 
           <Form.Group controlId="optionB">
@@ -123,6 +174,9 @@ const AdminPage = () => {
                 setQuestion({ ...question, OptionB: e.target.value })
               }
             />
+            {formErrors.OptionB && (
+              <span className="text-danger">{formErrors.OptionB}</span>
+            )}
           </Form.Group>
 
           <Form.Group controlId="optionC">
@@ -135,6 +189,9 @@ const AdminPage = () => {
                 setQuestion({ ...question, OptionC: e.target.value })
               }
             />
+            {formErrors.OptionC && (
+              <span className="text-danger">{formErrors.OptionC}</span>
+            )}
           </Form.Group>
 
           <Form.Group controlId="optionD">
@@ -147,6 +204,9 @@ const AdminPage = () => {
                 setQuestion({ ...question, OptionD: e.target.value })
               }
             />
+            {formErrors.OptionD && (
+              <span className="text-danger">{formErrors.OptionD}</span>
+            )}
           </Form.Group>
 
           <Form.Group controlId="correctAnswer">
@@ -177,6 +237,9 @@ const AdminPage = () => {
               min="1"
               max="5"
             />
+            {formErrors.QuestionLevel && (
+              <span className="text-danger">{formErrors.QuestionLevel}</span>
+            )}
           </Form.Group>
 
           <Form.Group controlId="language">
@@ -188,10 +251,15 @@ const AdminPage = () => {
                 setQuestion({ ...question, Language: e.target.value })
               }
             >
-              <option value="english">English</option>
-              <option value="spanish">Spanish</option>
-              <option value="french">French</option>
+              {languages.map((language) => (
+                <option key={language.SubjectId} value={language.SubjectName}>
+                  {language.SubjectName}
+                </option>
+              ))}
             </Form.Control>
+            {formErrors.Language && (
+              <span className="text-danger">{formErrors.Language}</span>
+            )}
           </Form.Group>
 
           <Button variant="primary" type="submit" style={{ marginTop: "1rem" }}>
