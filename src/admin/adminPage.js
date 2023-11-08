@@ -16,22 +16,13 @@ const AdminPage = () => {
   };
 
   const [question, setQuestion] = useState({ ...initialQuestionState });
-  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalUsers, setTotalUsers] = useState([]); // Change to an array to store user data
   const [totalQuestions, setTotalQuestions] = useState(0);
-  const [languages, setLanguages] = useState([]); // State variable to store available languages
-  const [formErrors, setFormErrors] = useState({}); // State variable to store form field errors
+  const [languages, setLanguages] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
+  const [selectedLanguageUsers, setSelectedLanguageUsers] = useState(0);
 
   useEffect(() => {
-    // Fetching total users and total questions from API
-    fetch("/api/getTotalUsers")
-      .then((response) => response.json())
-      .then((data) => {
-        setTotalUsers(data.totalUsers);
-      })
-      .catch((error) => {
-        console.error("Error fetching total users:", error);
-      });
-
     fetch("/api/getTotalQuestions")
       .then((response) => response.json())
       .then((data) => {
@@ -41,17 +32,26 @@ const AdminPage = () => {
         console.error("Error fetching total questions:", error);
       });
 
-    // Fetching available languages from the API
     fetch(
       "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/languages"
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Languages:", data);
         setLanguages(data);
       })
       .catch((error) => {
         console.error("Error fetching languages:", error);
+      });
+
+    fetch(
+      "https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/admin/totalUsers"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setTotalUsers(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching total users:", error);
       });
   }, []);
 
@@ -86,16 +86,29 @@ const AdminPage = () => {
     return errors;
   };
 
+  useEffect(() => {
+    if (question.Language) {
+      const selectedLanguageUser = totalUsers.find(
+        (user) => user.SubjectName === question.Language
+      );
+      if (selectedLanguageUser) {
+        setSelectedLanguageUsers(parseInt(selectedLanguageUser.UserCount));
+      } else {
+        setSelectedLanguageUsers(0);
+      }
+    }
+  }, [question.Language, totalUsers]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateForm();
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
+      // Making a POST request to the API to add the question
       const selectedLevel = parseInt(question.QuestionLevel);
       const apiUrl = `https://language-learning-game-backend.rishavkumaraug20005212.workers.dev/game/questions?questionLevel=${selectedLevel}&subjectLanguage=${question.Language}&question=${question.Question}&optionA=${question.OptionA}&optionB=${question.OptionB}&optionC=${question.OptionC}&optionD=${question.OptionD}&correctAnswer=${question.CorrectAnswer}`;
 
-      // Making a POST request to the API to add the question
       fetch(apiUrl, {
         method: "POST",
       })
@@ -120,12 +133,12 @@ const AdminPage = () => {
   return (
     <Container className="admin-container my-5">
       <h1 className="admin-heading">Admin Page</h1>
+      <Card.Text className="admin-info">
+        Users Registered in {question.Language}:{" "}
+        <span className="admin-count">{selectedLanguageUsers}</span>
+      </Card.Text>
       <Card className="mb-4">
         <Card.Body>
-          <Card.Text className="admin-info">
-            Total Registered Users:{" "}
-            <span className="admin-count">{totalUsers}</span>
-          </Card.Text>
           <Card.Text className="admin-info">
             Total Questions:{" "}
             <span className="admin-count">{totalQuestions}</span>
@@ -261,7 +274,6 @@ const AdminPage = () => {
               <span className="text-danger">{formErrors.Language}</span>
             )}
           </Form.Group>
-
           <Button variant="primary" type="submit" style={{ marginTop: "1rem" }}>
             Submit
           </Button>
