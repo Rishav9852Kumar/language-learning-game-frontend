@@ -9,7 +9,7 @@ const AboutPage = () => {
         <Row className="m-0">
           <Col className="about-content">
             <iframe
-              src="https://docs.google.com/presentation/d/1N5we7hFqd3AK9Nf9qFvxz2jXvT8KFZMz561F9npIkqk/edit?usp=sharing"
+              src="https://test-moengage.netlify.app/index_scorm.html"
               title="Iframe Example"
               className="full-size-iframe"
             ></iframe>
