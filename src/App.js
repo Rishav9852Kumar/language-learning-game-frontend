@@ -55,6 +55,7 @@ function App() {
         <PlayerContext.Provider value={{ player, setPlayer }}>
           <GameContext.Provider value={{ game, setGame }}>
             <Header />
+            <Footer />
             <Routes>
               <Route exact path="/" element={<HomePage />} />
               <Route exact path="/signin" element={<SignIn />} />
@@ -66,7 +67,6 @@ function App() {
               <Route exact path="/game" element={<GamePage />} />
               <Route exact path="*" element={<PageNotFound />} />
             </Routes>
-            <Footer />
           </GameContext.Provider>
         </PlayerContext.Provider>
       </UserContext.Provider>

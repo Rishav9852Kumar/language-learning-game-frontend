@@ -3,13 +3,13 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
   NavbarText,
 } from "reactstrap";
 import { IoIosLogOut } from "react-icons/io";
+import mowbluelogo from "../gallery/moe-bluelogo.png"
 import { VscAccount } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
@@ -31,34 +31,27 @@ const Header = () => {
   };
 
   return (
-    <Navbar
-      color="primary"
-      light
-      expand="md"
-      className="container-fluid is-italic"
-    >
-      <NavbarBrand>
-        <Link to="/" className="text-white">
-          Language Learning Game
-        </Link>
-      </NavbarBrand>
+    <Navbar light expand="md" className="container-fluid is-italic header">
+      <Link to="/">
+        <img src={mowbluelogo} alt="Your" width="200" height="200" />
+      </Link>
 
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="ml-auto" navbar>
           {userContext.user ? (
             <>
-              <NavbarText className="text-white">
+              <NavbarText >
                 <VscAccount size={30} />{" "}
                 {userContext.user?.email ? userContext.user.email : ""}
               </NavbarText>
-              <NavItem className="float-end">
+              <NavItem className="float-end login ">
                 <NavLink
                   data-toggle="tooltip"
                   data-placement="right"
                   title="To Log out"
                   onClick={handleSignOut}
-                  className="text-white offset-lg-3 navbar-end"
+                  className=" offset-lg-3 navbar-end "
                 >
                   Sign Out <IoIosLogOut size={30} />
                 </NavLink>
@@ -66,11 +59,11 @@ const Header = () => {
             </>
           ) : (
             <>
-              <NavItem>
+              <NavItem >
                 <NavLink
                   tag={Link}
                   to="/signup"
-                  className="text-white ml-auto"
+                  className=" ml-auto"
                   data-toggle="tooltip"
                   data-placement="right"
                   title="To sign up as a new user"
@@ -82,7 +75,7 @@ const Header = () => {
                 <NavLink
                   tag={Link}
                   to="/signin"
-                  className="text-white ml-auto"
+                  className=" ml-auto"
                   data-toggle="tooltip"
                   data-placement="right"
                   title="Login to an existing account"

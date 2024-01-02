@@ -27,9 +27,6 @@ const Footer = () => {
               </li>
             </ul>
           </Col>
-          <Col sm={6} className="footer-text">
-            &copy; 2023 Language Learning Game (LLG). All rights reserved.
-          </Col>
         </Row>
       </Container>
     </footer>
