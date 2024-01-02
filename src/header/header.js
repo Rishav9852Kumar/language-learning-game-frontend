@@ -41,7 +41,7 @@ const Header = () => {
         <Nav className="ml-auto" navbar>
           {userContext.user ? (
             <>
-              <NavbarText >
+              <NavbarText>
                 <VscAccount size={30} />{" "}
                 {userContext.user?.email ? userContext.user.email : ""}
               </NavbarText>
@@ -53,13 +53,13 @@ const Header = () => {
                   onClick={handleSignOut}
                   className=" offset-lg-3 navbar-end "
                 >
-                  Sign Out <IoIosLogOut size={30} />
+                  <b>Sign Out</b> <IoIosLogOut size={30} />
                 </NavLink>
               </NavItem>
             </>
           ) : (
             <>
-              <NavItem >
+              <NavItem>
                 <NavLink
                   tag={Link}
                   to="/signup"
@@ -68,7 +68,7 @@ const Header = () => {
                   data-placement="right"
                   title="To sign up as a new user"
                 >
-                  Sign Up
+                  <b>Sign Up</b>
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -80,7 +80,7 @@ const Header = () => {
                   data-placement="right"
                   title="Login to an existing account"
                 >
-                  Sign In
+                  <b>Sign In</b>
                 </NavLink>
               </NavItem>
             </>

@@ -1,47 +1,44 @@
-/* User.css */
-.user-container {
-  background-color: #f7f7f7;
-  padding: 20px;
-  min-height: 100vh;
+/* AboutPage.css */
+
+.full-page {
+  height: 100vh;
+  width: 100vw;
 }
 
-.user-details {
-  background-color: #ffffff;
-  border: 1px solid #ccc;
+.full-size-iframe {
+  position: absolute;
+  height: 100%; 
+  width: 100%;
+  left: 0;
+  top: 0;
+  border: none;
+}
+
+.about-container {
+  padding: 20px;
+  overflow-x: auto; 
+  margin-bottom: 8cm;
+  height: 100vh;
+  width: 100vw;
+}
+.about-container {
+  overflow-x: auto;
+  height: calc(100vh - 20px); /* subtract top and bottom padding */
+  width: 100vw;
+}
+
+.about-content {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
   border-radius: 5px;
-  padding: 20px;
-  margin-bottom: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
 }
 
-.user-heading {
-  font-size: 24px;
+.about-contact-info {
   font-weight: bold;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.user-info {
   font-size: 18px;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.user-card {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.user-card-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.add-subject-button {
   margin-top: 20px;
+  color: #343a40;
 }
