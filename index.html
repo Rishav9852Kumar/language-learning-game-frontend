@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+</head>
+<body>
+    <div id="test" aria-label="Initial Label">Hello, World!</div>
+
+    <script>
+        setTimeout(function() {
+            document.getElementById('test').setAttribute('aria-label', 'You Scored: ');
+        }, 5000);
+    </script>
+</body>
+</html>

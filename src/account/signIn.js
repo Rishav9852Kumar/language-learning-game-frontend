@@ -161,7 +161,7 @@ const handleSignin = () => {
           <Col lg={6} className="offset-lg-3 mt-4">
             <Card body inverse id="signin-card">
               <Form onSubmit={handleSubmit}>
-                <CardHeader id="signin-header">
+                <CardHeader id="signin-header" style={{textAlign: "center",fontSize: "20px"}}>
                   Sign In
                   <FiUnlock
                     className="ml-auto"
@@ -176,11 +176,8 @@ const handleSignin = () => {
 
                 <CardBody id="signin-body">
                   <FormGroup row>
-                    <Label for="email" sm={3}>
-                      Email
-                    </Label>
                     <Col sm={9}>
-                      <Input
+                      <Input style={{fontSize: "18px", padding: "15px"}}
                         type="email"
                         name="email"
                         id="email"
@@ -191,11 +188,8 @@ const handleSignin = () => {
                     </Col>
                   </FormGroup>
                   <FormGroup row>
-                    <Label for="password" sm={3}>
-                      Password
-                    </Label>
                     <Col sm={9}>
-                      <Input
+                      <Input style={{fontSize: "18px", padding: "15px"}}
                         type="password"
                         name="password"
                         id="password"
@@ -218,5 +212,6 @@ const handleSignin = () => {
       </Container>
     </div>
   );
+  
 };
 export default SignIn;
