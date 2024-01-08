@@ -5,26 +5,10 @@
   width: 100vw;
 }
 
-.full-size-iframe {
-  position: absolute;
-  height: 100%; 
-  width: 100%;
-  left: 0;
-  top: 0;
-  border: none;
-}
-
-.about-container {
-  padding: 20px;
-  overflow-x: auto; 
-  margin-bottom: 8cm;
-  height: 100vh;
-  width: 100vw;
-}
 .about-container {
   overflow-x: auto;
   height: calc(100vh - 20px); /* subtract top and bottom padding */
-  width: 100vw;
+  width: 95vw;
 }
 
 .about-content {

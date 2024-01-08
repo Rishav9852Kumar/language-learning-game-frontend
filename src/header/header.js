@@ -59,18 +59,7 @@ const Header = () => {
             </>
           ) : (
             <>
-              <NavItem>
-                <NavLink
-                  tag={Link}
-                  to="/signup"
-                  className=" ml-auto"
-                  data-toggle="tooltip"
-                  data-placement="right"
-                  title="To sign up as a new user"
-                >
-                  <b>Sign Up</b>
-                </NavLink>
-              </NavItem>
+             
               <NavItem>
                 <NavLink
                   tag={Link}

@@ -1,20 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./AccessDenied.css";
-// <a href="#" onClick={() => handleLogout()} className="btn">
+
 const AccessDenied = () => {
   return (
-    <div className="access-denied-page">
-      <div className="access-denied-message">
-        <h1>Access Denied</h1>
+    <div className="access-denied-container">
+      <div className="access-denied-content">
+        <h1>Oops!</h1>
+        <h2>Access Denied</h2>
         <p>You do not have permission to access this page.</p>
-      </div>
-      <div className="login-options">
-        <p>Would you like to...</p>
-        <a to="/login" className="btn">
-          Log Out
-        </a>
-        <Link to="/login" className="btn">
+        <Link to="/signin" className="access-btn">
           Log In
         </Link>
       </div>

@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./LeaderBoard.css";
+import { UserContext } from "../context/userContext";
+import { Navigate } from "react-router-dom";
 
 const LeaderBoard = () => {
+  const context = useContext(UserContext);
+   if (!context.user?.uid) {
+     return <Navigate to="/signin" />;
+   }
   return (
     <div className="not-found-container">
       <div className="not-found-content">

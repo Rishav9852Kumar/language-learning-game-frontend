@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
 import TestPopup from "../components/TestPopup";
 import "./AboutPage.css";
+import { UserContext } from "../context/userContext";
+import { Navigate } from "react-router-dom";
 
 const AboutPage = () => {
+  const context = useContext(UserContext);
+  
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
-
+if (!context.user?.uid) {
+  return <Navigate to="/signin" />;
+}
   return (
     <div className="full-page">
       <Container className="about-container">

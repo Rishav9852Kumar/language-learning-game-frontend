@@ -28,6 +28,7 @@ import User from "./account/user.js";
 import LeaderBoard from "./account/leaderBoard.js";
 import AboutPage from "./utils/AboutPage.js";
 import GamePage from "./components/GamePage";
+import AccessDenied from "./admin/accessDenied .js"
 
 function App() {
   const [user, setUser] = useState(null);
@@ -65,6 +66,7 @@ function App() {
               <Route exact path="/user/leaderboard" element={<LeaderBoard />} />
               <Route exact path="/about" element={<AboutPage />} />
               <Route exact path="/game" element={<GamePage />} />
+              <Route exact path="/access/denied" element={<AccessDenied/>}/>
               <Route exact path="*" element={<PageNotFound />} />
             </Routes>
           </GameContext.Provider>

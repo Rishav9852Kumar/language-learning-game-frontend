@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Form, Button, Badge } from "react-bootstrap";
 import "./AdminPage.css";
 import { toast } from "react-toastify";
+import { UserContext } from "../context/userContext";
+import { Navigate } from "react-router-dom";
 
 const AdminPage = () => {
   const initialTestState = {
@@ -12,7 +14,7 @@ const AdminPage = () => {
     file: null,
     emails: [],
   };
-
+  const context = useContext(UserContext);
   const [test, setTest] = useState({ ...initialTestState });
   const [emailInput, setEmailInput] = useState("");
 
@@ -57,7 +59,9 @@ const AdminPage = () => {
       emails: test.emails.filter((email) => email !== emailToRemove),
     });
   };
-
+if (!context.user?.uid) {
+  return <Navigate to="/access/denied" />;
+}
   return (
     <div className="background">
       <Container className="admin-container my-5">
