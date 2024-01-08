@@ -1,11 +1,14 @@
-import React from "react";
+import React, {useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./TestPopup.css";
+import { UserContext } from "../context/userContext";
 
 const TestPopup = () => {
   const navigate = useNavigate();
+  const context = useContext(UserContext);
 
   const handleReturnToHomePage = () => {
+    context.setUser(null);
     navigate("/"); // Navigate back to the home page
   };
 
