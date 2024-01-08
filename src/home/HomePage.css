@@ -1,71 +1,56 @@
 /* HomePage.css */
-body {
-  background: linear-gradient(to bottom, #2980b9, #2c3e50); /* Gradient background color */
-  margin: 0;
-  padding: 0;
-}
 
 .homepage-container {
-background-color: #f8f9fa;
-  font-family: 'Arial', sans-serif;
-  padding: 40px 0;
-  text-align: center; 
-  min-height: 100vh; 
+  padding-top: 30px;
+  width: 100%;
+  background-color: #f8f9fa; /* Light gray background */
+}
+.heading-home
+{
+  font-size: 2em;
+}
+.sub-heading{
+  font-size: 1em;
+  padding-bottom: 10px;
+}
+.homepage-content {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.game-card {
-  margin: 1rem;
-  padding: 1rem;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  transition: transform 0.2s;
+.step-col {
+  margin-bottom: 20px;
 }
 
-.game-card:hover {
-  transform: scale(1.03);
+/* HomePage.css */
+
+/* ... other styles ... */
+
+.step-img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 100%; /* Ensures the image spans the entire width of the card */
+  height: 200px; /* Maintain a fixed height for all images */
+  object-fit: cover; /* Ensures the image covers the area and is clipped to fit */
+  transition: transform 0.3s ease, object-fit 0.3s ease; /* Smooth transitions for hover effect */
 }
 
-h1 {
-  font-weight: bold;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+.step-card:hover .step-img {
+  object-fit: contain; /* On hover, show the entire image */
+  transform: scale(1.05); /* Slightly enlarge image on hover */
 }
 
-.game-level {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+.step-img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  height: 200px; /* Fixed height for images */
+  object-fit: cover; /* Ensures the image covers the area */
 }
 
-.game-level-easy {
-  background-color: #5bc0de;
-  color: white;
-}
-
-.game-level-medium {
-  background-color: #f0ad4e; 
-  color: white;
-}
-
-.game-level-hard {
-  background-color: #d9534f;
-  color: white;
-}
-
-.game-description {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.game-link {
-  font-size: 1rem;
-  text-decoration: none;
-  color: #007bff;
-}
-
-.game-link:hover {
-  text-decoration: underline;
+/* Ensure text size is responsive */
+@media (max-width: 768px) {
+  .step-card {
+    margin-left: auto;
+    margin-right: auto; /* Center cards on smaller screens */
+  }
 }
